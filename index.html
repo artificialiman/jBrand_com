@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Gear for the Driven - Client Brief Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Work+Sans:wght@400;500;600;700&family=Inter+Tight:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ============================================================================
+       CORE DESIGN SYSTEM
+       ============================================================================ */
+    
+    :root {
+      /* Colors */
+      --color-primary: #0A0A0A;
+      --color-primary-light: #1A1A1A;
+      --color-accent: #FF3B00;
+      --color-accent-hover: #FF5722;
+      --color-accent-subtle: #FF3B0015;
+      --color-performance: #00E5A0;
+      --color-white: #FFFFFF;
+      --color-grey-100: #F5F5F7;
+      --color-grey-200: #E8E8ED;
+      --color-grey-300: #D1D1D6;
+      --color-grey-400: #8E8E93;
+      --color-grey-600: #48484A;
+      --color-grey-700: #3A3A3C;
+      --color-grey-800: #2C2C2E;
+      
+      /* Typography */
+      --font-display: 'Bebas Neue', sans-serif;
+      --font-heading: 'Work Sans', sans-serif;
+      --font-body: 'Inter Tight', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      
+      /* Spacing */
+      --space-1: 0.25rem;
+      --space-2: 0.5rem;
+      --space-3: 0.75rem;
+      --space-4: 1rem;
+      --space-5: 1.5rem;
+      --space-6: 2rem;
+      --space-7: 3rem;
+      --space-8: 4rem;
+      
+      /* Shadows */
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.15), 0 3px 6px rgba(0, 0, 0, 0.1);
+      --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.2), 0 5px 10px rgba(0, 0, 0, 0.15);
+      --shadow-glow: 0 0 20px var(--color-accent-subtle);
+      
+      /* Transitions */
+      --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+      
+      /* Radius */
+      --radius-sm: 2px;
+      --radius-md: 4px;
+      --radius-lg: 8px;
+      --radius-xl: 16px;
+      --radius-full: 9999px;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    html {
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    
+    body {
+      font-family: var(--font-body);
+      line-height: 1.6;
+      color: var(--color-primary);
+      background: var(--color-white);
+      overflow-x: hidden;
+    }
+    
+    /* ============================================================================
+       HEADER & NAVIGATION
+       ============================================================================ */
+    
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--color-grey-200);
+      padding: var(--space-4) var(--space-5);
+    }
+    
+    .nav-container {
+      max-width: 1440px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .logo {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--color-primary);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+      transition: color var(--transition-base);
+    }
+    
+    .logo:hover {
+      color: var(--color-accent);
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: var(--space-6);
+      list-style: none;
+      align-items: center;
+    }
+    
+    .nav-link {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--color-primary);
+      text-decoration: none;
+      transition: color var(--transition-fast);
+      position: relative;
+    }
+    
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--color-accent);
+      transition: width var(--transition-base);
+    }
+    
+    .nav-link:hover::after {
+      width: 100%;
+    }
+    
+    .cart-icon {
+      position: relative;
+      cursor: pointer;
+      transition: transform var(--transition-base);
+    }
+    
+    .cart-icon:hover {
+      transform: scale(1.1);
+    }
+    
+    .cart-count {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: var(--color-accent);
+      color: white;
+      font-size: 0.7rem;
+      font-weight: 700;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    /* ============================================================================
+       HERO SECTION
+       ============================================================================ */
+    
+    .hero {
+      position: relative;
+      min-height: 85vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--color-primary);
+      color: var(--color-white);
+      overflow: hidden;
+    }
+    
+    .hero-background {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background: 
+        linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.3) 100%),
+        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><rect fill="%23111" width="1200" height="800"/><g opacity="0.3"><path fill="%23FF3B00" d="M0 400 Q300 200 600 400 T1200 400 V800 H0 Z"/></g></svg>') center/cover;
+      animation: pulse 20s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      max-width: 1000px;
+      padding: var(--space-6);
+      animation: fadeInUp 1s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .hero-badge {
+      display: inline-block;
+      padding: var(--space-2) var(--space-4);
+      background: var(--color-accent);
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border-radius: var(--radius-full);
+      margin-bottom: var(--space-4);
+      animation: fadeInUp 1s 0.2s cubic-bezier(0.4, 0, 0.2, 1) backwards;
+    }
+    
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 10vw, 6rem);
+      font-weight: 900;
+      line-height: 0.9;
+      margin-bottom: var(--space-5);
+      text-transform: uppercase;
+      letter-spacing: -0.03em;
+      animation: fadeInUp 1s 0.4s cubic-bezier(0.4, 0, 0.2, 1) backwards;
+    }
+    
+    .hero-accent {
+      color: var(--color-accent);
+      display: block;
+    }
+    
+    .hero-subtitle {
+      font-size: clamp(1rem, 2vw, 1.5rem);
+      font-weight: 300;
+      margin-bottom: var(--space-6);
+      opacity: 0.9;
+      animation: fadeInUp 1s 0.6s cubic-bezier(0.4, 0, 0.2, 1) backwards;
+    }
+    
+    .hero-cta {
+      display: flex;
+      gap: var(--space-4);
+      justify-content: center;
+      flex-wrap: wrap;
+      animation: fadeInUp 1s 0.8s cubic-bezier(0.4, 0, 0.2, 1) backwards;
+    }
+    
+    /* ============================================================================
+       BUTTONS
+       ============================================================================ */
+    
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      padding: var(--space-4) var(--space-6);
+      font-family: var(--font-body);
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all var(--transition-base);
+      position: relative;
+      overflow: hidden;
+      user-select: none;
+    }
+    
+    .btn-primary {
+      background: var(--color-accent);
+      color: var(--color-white);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .btn-primary:hover {
+      background: var(--color-accent-hover);
+      box-shadow: var(--shadow-lg), var(--shadow-glow);
+      transform: translateY(-2px);
+    }
+    
+    .btn-ghost {
+      background: transparent;
+      color: var(--color-white);
+      border: 2px solid var(--color-white);
+    }
+    
+    .btn-ghost:hover {
+      background: var(--color-white);
+      color: var(--color-primary);
+    }
+    
+    /* ============================================================================
+       CATEGORIES GRID (MAIN PAGE)
+       ============================================================================ */
+    
+    .categories-section {
+      padding: var(--space-8) var(--space-5);
+      max-width: 1440px;
+      margin: 0 auto;
+    }
+    
+    .section-header {
+      text-align: center;
+      margin-bottom: var(--space-7);
+    }
+    
+    .section-label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--color-accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: var(--space-3);
+    }
+    
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 900;
+      color: var(--color-primary);
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      margin-bottom: var(--space-4);
+    }
+    
+    .categories-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: var(--space-5);
+      margin-bottom: var(--space-8);
+    }
+    
+    .category-card {
+      position: relative;
+      aspect-ratio: 4/5;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      cursor: pointer;
+      box-shadow: var(--shadow-md);
+      transition: all var(--transition-base);
+    }
+    
+    .category-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-xl);
+    }
+    
+    .category-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.7) 100%);
+      z-index: 1;
+      transition: opacity var(--transition-base);
+    }
+    
+    .category-card:hover::before {
+      opacity: 0.5;
+    }
+    
+    .category-image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform var(--transition-slow);
+    }
+    
+    .category-card:hover .category-image {
+      transform: scale(1.1);
+    }
+    
+    .category-content {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: var(--space-5);
+      z-index: 2;
+      color: white;
+    }
+    
+    .category-name {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      margin-bottom: var(--space-2);
+      letter-spacing: -0.01em;
+    }
+    
+    .category-count {
+      font-size: 0.875rem;
+      opacity: 0.9;
+      font-weight: 500;
+    }
+    
+    .category-arrow {
+      position: absolute;
+      top: var(--space-4);
+      right: var(--space-4);
+      width: 40px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.2rem;
+      transition: all var(--transition-base);
+      z-index: 2;
+    }
+    
+    .category-card:hover .category-arrow {
+      background: var(--color-accent);
+      transform: rotate(45deg);
+    }
+    
+    /* ============================================================================
+       MODAL SYSTEM
+       ============================================================================ */
+    
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(5px);
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-5);
+      animation: fadeIn 0.3s ease;
+    }
+    
+    .modal-overlay.active {
+      display: flex;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    .modal {
+      background: white;
+      border-radius: var(--radius-xl);
+      max-width: 900px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(50px) scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+    
+    .modal-close {
+      position: absolute;
+      top: var(--space-4);
+      right: var(--space-4);
+      width: 40px;
+      height: 40px;
+      background: var(--color-grey-100);
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: var(--color-grey-600);
+      transition: all var(--transition-base);
+      z-index: 10;
+    }
+    
+    .modal-close:hover {
+      background: var(--color-accent);
+      color: white;
+      transform: rotate(90deg);
+    }
+    
+    .modal-content {
+      padding: var(--space-7);
+    }
+    
+    .modal-header {
+      margin-bottom: var(--space-6);
+    }
+    
+    .modal-title {
+      font-family: var(--font-display);
+      font-size: 3rem;
+      font-weight: 900;
+      color: var(--color-primary);
+      text-transform: uppercase;
+      margin-bottom: var(--space-3);
+    }
+    
+    .modal-subtitle {
+      font-size: 1.1rem;
+      color: var(--color-grey-600);
+      line-height: 1.6;
+    }
+    
+    .flow-preview {
+      background: var(--color-grey-100);
+      padding: var(--space-6);
+      border-radius: var(--radius-lg);
+      margin-bottom: var(--space-6);
+    }
+    
+    .flow-step {
+      display: flex;
+      gap: var(--space-4);
+      margin-bottom: var(--space-5);
+      padding-bottom: var(--space-5);
+      border-bottom: 1px solid var(--color-grey-300);
+    }
+    
+    .flow-step:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+    
+    .flow-number {
+      flex-shrink: 0;
+      width: 40px;
+      height: 40px;
+      background: var(--color-primary);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-family: var(--font-mono);
+    }
+    
+    .flow-info h3 {
+      font-family: var(--font-heading);
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: var(--space-2);
+    }
+    
+    .flow-info p {
+      color: var(--color-grey-600);
+      font-size: 0.95rem;
+    }
+    
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: var(--space-4);
+    }
+    
+    .feature-item {
+      padding: var(--space-4);
+      background: var(--color-grey-100);
+      border-radius: var(--radius-lg);
+      transition: all var(--transition-base);
+    }
+    
+    .feature-item:hover {
+      background: var(--color-accent-subtle);
+      transform: translateY(-2px);
+    }
+    
+    .feature-icon {
+      font-size: 2rem;
+      margin-bottom: var(--space-3);
+    }
+    
+    .feature-title {
+      font-weight: 600;
+      margin-bottom: var(--space-2);
+    }
+    
+    .feature-desc {
+      font-size: 0.9rem;
+      color: var(--color-grey-600);
+    }
+    
+    /* ============================================================================
+       RESPONSIVE
+       ============================================================================ */
+    
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+      
+      .hero-title {
+        font-size: clamp(2.5rem, 8vw, 4rem);
+      }
+      
+      .hero-cta {
+        flex-direction: column;
+      }
+      
+      .btn {
+        width: 100%;
+      }
+      
+      .categories-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .modal-content {
+        padding: var(--space-5);
+      }
+      
+      .modal-title {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  
+  <!-- HEADER -->
+  <header class="header">
+    <nav class="nav-container">
+      <a href="#" class="logo">GFTD</a>
+      <ul class="nav-links">
+        <li><a href="#" class="nav-link">Shop All</a></li>
+        <li><a href="#" class="nav-link">Collections</a></li>
+        <li><a href="#" class="nav-link">About</a></li>
+        <li>
+          <div class="cart-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 2L7.17 6M9 2h6M9 2l-1.83 4M15 2l1.83 4M15 2l1.83 4M7.17 6H4.18c-.4 0-.72.32-.62.71l1.93 8.5c.08.35.38.59.74.59h11.54c.36 0 .66-.24.74-.59l1.93-8.5c.1-.39-.22-.71-.62-.71h-2.99M7.17 6h9.66M7.17 6l-.97 2M16.83 6l.97 2M6.2 8h11.6"/>
+              <circle cx="9" cy="20" r="1"/>
+              <circle cx="16" cy="20" r="1"/>
+            </svg>
+            <span class="cart-count">0</span>
+          </div>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="hero">
+    <div class="hero-background"></div>
+    <div class="hero-content">
+      <div class="hero-badge">CLIENT BRIEF DEMO</div>
+      <h1 class="hero-title">
+        <span class="hero-accent">Gear for</span>
+        the Driven
+      </h1>
+      <p class="hero-subtitle">
+        Performance wear for athletes who refuse to compromise. Click any category below to see how the user journey flows.
+      </p>
+      <div class="hero-cta">
+        <button class="btn btn-primary" onclick="scrollToCategories()">Explore Categories</button>
+        <button class="btn btn-ghost" onclick="openModal('overview')">View Full Site Flow</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATEGORIES SECTION -->
+  <section class="categories-section" id="categories">
+    <div class="section-header">
+      <div class="section-label">Browse by Category</div>
+      <h2 class="section-title">What drives you?</h2>
+    </div>
+
+    <div class="categories-grid">
+      <!-- Footwear -->
+      <div class="category-card" onclick="openModal('footwear')">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 500'%3E%3Crect fill='%23333' width='400' height='500'/%3E%3Cpath fill='%23FF3B00' opacity='0.3' d='M200 100 L300 250 L200 400 L100 250 Z'/%3E%3Ctext x='200' y='250' text-anchor='middle' fill='white' font-size='40' font-family='system-ui' font-weight='bold'%3EFOOTWEAR%3C/text%3E%3C/svg%3E" alt="Footwear" class="category-image">
+        <div class="category-arrow">→</div>
+        <div class="category-content">
+          <h3 class="category-name">Footwear</h3>
+          <p class="category-count">Training · Running · Lifting</p>
+        </div>
+      </div>
+
+      <!-- Activewear -->
+      <div class="category-card" onclick="openModal('activewear')">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 500'%3E%3Crect fill='%23222' width='400' height='500'/%3E%3Ccircle fill='%23FF3B00' opacity='0.3' cx='200' cy='250' r='120'/%3E%3Ctext x='200' y='240' text-anchor='middle' fill='white' font-size='32' font-family='system-ui' font-weight='bold'%3EACTIVE%3C/text%3E%3Ctext x='200' y='270' text-anchor='middle' fill='white' font-size='32' font-family='system-ui' font-weight='bold'%3EWEAR%3C/text%3E%3C/svg%3E" alt="Activewear" class="category-image">
+        <div class="category-arrow">→</div>
+        <div class="category-content">
+          <h3 class="category-name">Activewear</h3>
+          <p class="category-count">Tops · Bottoms · Sets</p>
+        </div>
+      </div>
+
+      <!-- Compression -->
+      <div class="category-card" onclick="openModal('compression')">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 500'%3E%3Crect fill='%231a1a1a' width='400' height='500'/%3E%3Crect fill='%23FF3B00' opacity='0.3' x='50' y='100' width='300' height='300' rx='20'/%3E%3Ctext x='200' y='240' text-anchor='middle' fill='white' font-size='28' font-family='system-ui' font-weight='bold'%3ECOMPRESSION%3C/text%3E%3Ctext x='200' y='270' text-anchor='middle' fill='white' font-size='28' font-family='system-ui' font-weight='bold'%3E%26 SUPPORT%3C/text%3E%3C/svg%3E" alt="Compression" class="category-image">
+        <div class="category-arrow">→</div>
+        <div class="category-content">
+          <h3 class="category-name">Compression</h3>
+          <p class="category-count">Support · Recovery · Performance</p>
+        </div>
+      </div>
+
+      <!-- Supplements -->
+      <div class="category-card" onclick="openModal('supplements')">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 500'%3E%3Crect fill='%23111' width='400' height='500'/%3E%3Cpath fill='%2300E5A0' opacity='0.3' d='M200 80 L320 200 L200 420 L80 200 Z'/%3E%3Ctext x='200' y='240' text-anchor='middle' fill='white' font-size='30' font-family='system-ui' font-weight='bold'%3ESUPPLE-%3C/text%3E%3Ctext x='200' y='270' text-anchor='middle' fill='white' font-size='30' font-family='system-ui' font-weight='bold'%3EMENTS%3C/text%3E%3C/svg%3E" alt="Supplements" class="category-image">
+        <div class="category-arrow">→</div>
+        <div class="category-content">
+          <h3 class="category-name">Supplements</h3>
+          <p class="category-count">Protein · Pre-Workout · Recovery</p>
+        </div>
+      </div>
+
+      <!-- Accessories -->
+      <div class="category-card" onclick="openModal('accessories')">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 500'%3E%3Crect fill='%23282828' width='400' height='500'/%3E%3Cline x1='100' y1='200' x2='300' y2='300' stroke='%23FF3B00' stroke-width='60' opacity='0.3'/%3E%3Ctext x='200' y='240' text-anchor='middle' fill='white' font-size='32' font-family='system-ui' font-weight='bold'%3EACCES-%3C/text%3E%3Ctext x='200' y='270' text-anchor='middle' fill='white' font-size='32' font-family='system-ui' font-weight='bold'%3ESORIES%3C/text%3E%3C/svg%3E" alt="Accessories" class="category-image">
+        <div class="category-arrow">→</div>
+        <div class="category-content">
+          <h3 class="category-name">Accessories</h3>
+          <p class="category-count">Bags · Socks · Gear</p>
+        </div>
+      </div>
+
+      <!-- Equipment -->
+      <div class="category-card" onclick="openModal('equipment')">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 500'%3E%3Crect fill='%23202020' width='400' height='500'/%3E%3Crect fill='%23FF3B00' opacity='0.3' x='80' y='180' width='240' height='140' rx='10'/%3E%3Ctext x='200' y='240' text-anchor='middle' fill='white' font-size='32' font-family='system-ui' font-weight='bold'%3EEQUIP-%3C/text%3E%3Ctext x='200' y='270' text-anchor='middle' fill='white' font-size='32' font-family='system-ui' font-weight='bold'%3EMENT%3C/text%3E%3C/svg%3E" alt="Equipment" class="category-image">
+        <div class="category-arrow">→</div>
+        <div class="category-content">
+          <h3 class="category-name">Equipment</h3>
+          <p class="category-count">Training · Recovery · Performance</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODALS -->
+  
+  <!-- Overview Modal -->
+  <div class="modal-overlay" id="modal-overview">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal('overview')">×</button>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title">Site Flow Overview</h2>
+          <p class="modal-subtitle">Complete user journey from landing to WhatsApp checkout</p>
+        </div>
+
+        <div class="flow-preview">
+          <div class="flow-step">
+            <div class="flow-number">01</div>
+            <div class="flow-info">
+              <h3>Landing / Category Selection</h3>
+              <p>Hero section with brand message, category cards leading to product browsing. Best sellers, new arrivals, and featured collections prominently displayed.</p>
+            </div>
+          </div>
+
+          <div class="flow-step">
+            <div class="flow-number">02</div>
+            <div class="flow-info">
+              <h3>Product Listing Page</h3>
+              <p>Grid layout with filters (size, color, price, performance features). Quick-view modals for product details without leaving the page. Sort by popularity, price, newest.</p>
+            </div>
+          </div>
+
+          <div class="flow-step">
+            <div class="flow-number">03</div>
+            <div class="flow-info">
+              <h3>Product Detail Page</h3>
+              <p>Image gallery with zoom, technical specifications, size guide modal, customer reviews. Add to cart or wishlist. Recommended products carousel.</p>
+            </div>
+          </div>
+
+          <div class="flow-step">
+            <div class="flow-number">04</div>
+            <div class="flow-info">
+              <h3>Cart & Wishlist</h3>
+              <p>Persistent cart indicator, side-drawer cart for quick edits. Apply discount codes, see shipping estimates. Move between cart and wishlist easily.</p>
+            </div>
+          </div>
+
+          <div class="flow-step">
+            <div class="flow-number">05</div>
+            <div class="flow-info">
+              <h3>WhatsApp Checkout</h3>
+              <p>Pre-filled message with order details, customer information form (name, address, phone). One-click redirect to WhatsApp with formatted order message.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="feature-grid">
+          <div class="feature-item">
+            <div class="feature-icon">📱</div>
+            <div class="feature-title">PWA Ready</div>
+            <div class="feature-desc">Installable as app on iOS/Android with offline support</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🎨</div>
+            <div class="feature-title">Loading States</div>
+            <div class="feature-desc">Skeleton screens and shimmer effects for smooth UX</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🔔</div>
+            <div class="feature-title">Notifications</div>
+            <div class="feature-desc">Toast messages guide users through actions</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">⚡</div>
+            <div class="feature-title">Fast Performance</div>
+            <div class="feature-desc">Optimized assets, lazy loading, 60fps animations</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Category Modal Template (Footwear example) -->
+  <div class="modal-overlay" id="modal-footwear">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal('footwear')">×</button>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title">Footwear Flow</h2>
+          <p class="modal-subtitle">How users browse and purchase footwear</p>
+        </div>
+
+        <div class="flow-preview">
+          <div class="flow-step">
+            <div class="flow-number">01</div>
+            <div class="flow-info">
+              <h3>Category Landing</h3>
+              <p>Footwear hero with lifestyle imagery. Quick filters: Training, Running, Lifting, CrossFit. Featured products showcase performance benefits.</p>
+            </div>
+          </div>
+
+          <div class="flow-step">
+            <div class="flow-number">02</div>
+            <div class="flow-info">
+              <h3>Product Grid</h3>
+              <p>Card layout with hover effects showing alternate colorways. Filter sidebar: Size (6-13), Width, Color, Price Range, Features (waterproof, breathable, etc.)</p>
+            </div>
+          </div>
+
+          <div class="flow-step">
+            <div class="flow-number">03</div>
+            <div class="flow-info">
+              <h3>Product Page</h3>
+              <p>360° product view, technical specs table, size guide modal with foot measurement tool. Customer photos, review ratings, fit feedback (runs small/large/true).</p>
+            </div>
+          </div>
+
+          <div class="flow-step">
+            <div class="flow-number">04</div>
+            <div class="flow-info">
+              <h3>Add to Cart</h3>
+              <p>Success notification with cart preview. "Continue shopping" or "View cart" options. Related accessories suggested (performance socks, insoles).</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="feature-grid">
+          <div class="feature-item">
+            <div class="feature-icon">📏</div>
+            <div class="feature-title">Size Guide</div>
+            <div class="feature-desc">Interactive size chart with CM/US/UK conversions</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🔄</div>
+            <div class="feature-title">360° View</div>
+            <div class="feature-desc">Rotate product images for full inspection</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">⭐</div>
+            <div class="feature-title">Reviews</div>
+            <div class="feature-desc">Customer photos, ratings, fit feedback system</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🎯</div>
+            <div class="feature-title">Fit Predictor</div>
+            <div class="feature-desc">AI-powered size recommendation based on past purchases</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Similar modals for other categories -->
+  <div class="modal-overlay" id="modal-activewear">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal('activewear')">×</button>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title">Activewear Flow</h2>
+          <p class="modal-subtitle">Tops, bottoms, and complete performance sets</p>
+        </div>
+
+        <div class="flow-preview">
+          <div class="flow-step">
+            <div class="flow-number">01</div>
+            <div class="flow-info">
+              <h3>Category Split</h3>
+              <p>Three main sections: Tops (tanks, tees, long sleeve), Bottoms (shorts, joggers, leggings), Complete Sets (matched collections). Each with performance filters.</p>
+            </div>
+          </div>
+
+          <div class="flow-step">
+            <div class="flow-number">02</div>
+            <div class="flow-info">
+              <h3>Fabric Technology</h3>
+              <p>Filter by fabric tech: Moisture-wicking, Anti-odor, 4-way stretch, Quick-dry. Lifestyle vs performance cuts. Fit preference: Slim, Regular, Oversized.</p>
+            </div>
+          </div>
+
+          <div class="flow-step">
+            <div class="flow-number">03</div>
+            <div class="flow-info">
+              <h3>Outfit Builder</h3>
+              <p>Modal tool to build complete outfits. Select top + bottom, see matched sets. Add entire outfit to cart with one click. Suggested accessories auto-populate.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="feature-grid">
+          <div class="feature-item">
+            <div class="feature-icon">👕</div>
+            <div class="feature-title">Outfit Builder</div>
+            <div class="feature-desc">Mix and match tops/bottoms for complete looks</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🧵</div>
+            <div class="feature-title">Fabric Details</div>
+            <div class="feature-desc">Technical fabric specs with performance metrics</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">📦</div>
+            <div class="feature-title">Bundle Deals</div>
+            <div class="feature-desc">Save on complete sets and multi-item purchases</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🏋️</div>
+            <div class="feature-title">Activity Tags</div>
+            <div class="feature-desc">Filter by activity: Gym, Running, Yoga, Casual</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-compression">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal('compression')">×</button>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title">Compression & Support</h2>
+          <p class="modal-subtitle">Performance enhancement and injury prevention</p>
+        </div>
+
+        <div class="flow-preview">
+          <div class="flow-step">
+            <div class="flow-number">01</div>
+            <div class="flow-info">
+              <h3>Body Part Selection</h3>
+              <p>Visual body map: Click knee, elbow, ankle, calf, etc. Shows relevant products for that body part with compression level indicators.</p>
+            </div>
+          </div>
+
+          <div class="flow-step">
+            <div class="flow-number">02</div>
+            <div class="flow-info">
+              <h3>Compression Level</h3>
+              <p>Filter by compression intensity: Light (recovery), Medium (support), Firm (medical grade). Educational content on when to use each level.</p>
+            </div>
+          </div>
+
+          <div class="flow-step">
+            <div class="flow-number">03</div>
+            <div class="flow-info">
+              <h3>Measurement Guide</h3>
+              <p>Body part-specific measurement instructions with video demos. Size calculator based on circumference measurements. Fit guarantee messaging.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="feature-grid">
+          <div class="feature-item">
+            <div class="feature-icon">🎯</div>
+            <div class="feature-title">Body Map</div>
+            <div class="feature-desc">Interactive body diagram for product selection</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">📊</div>
+            <div class="feature-title">Compression Levels</div>
+            <div class="feature-desc">Clear intensity ratings with use case guidance</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">📐</div>
+            <div class="feature-title">Measure Tool</div>
+            <div class="feature-desc">Video guides for accurate body measurements</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">💪</div>
+            <div class="feature-title">Use Cases</div>
+            <div class="feature-desc">Filter by purpose: Recovery, Support, Performance</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-supplements">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal('supplements')">×</button>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title">Supplements Flow</h2>
+          <p class="modal-subtitle">Nutrition for peak performance</p>
+        </div>
+
+        <div class="flow-preview">
+          <div class="flow-step">
+            <div class="flow-number">01</div>
+            <div class="flow-info">
+              <h3>Goal Selection</h3>
+              <p>Quiz modal: What's your goal? (Build muscle, Lose fat, Increase energy, Improve recovery). Algorithm suggests product stack.</p>
+            </div>
+          </div>
+
+          <div class="flow-step">
+            <div class="flow-number">02</div>
+            <div class="flow-info">
+              <h3>Product Categories</h3>
+              <p>Protein (Whey, Plant, Casein), Pre-Workout, BCAAs, Creatine, Recovery, Vitamins. Filter by flavor, dietary restrictions (vegan, gluten-free, etc.)</p>
+            </div>
+          </div>
+
+          <div class="flow-step">
+            <div class="flow-number">03</div>
+            <div class="flow-info">
+              <h3>Nutrition Facts</h3>
+              <p>Expandable nutrition label, ingredient breakdown with sourcing info. Third-party testing badges. Serving calculator based on body weight/goals.</p>
+            </div>
+          </div>
+
+          <div class="flow-step">
+            <div class="flow-number">04</div>
+            <div class="flow-info">
+              <h3>Subscribe & Save</h3>
+              <p>Subscription options with delivery frequency selector. Save 15% on recurring orders. Pause/skip/cancel anytime messaging. Stack builder for multi-product subscriptions.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="feature-grid">
+          <div class="feature-item">
+            <div class="feature-icon">🎯</div>
+            <div class="feature-title">Goal Quiz</div>
+            <div class="feature-desc">Personalized supplement recommendations</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🧪</div>
+            <div class="feature-title">Lab Tested</div>
+            <div class="feature-desc">Third-party verification and transparency</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🔄</div>
+            <div class="feature-title">Subscriptions</div>
+            <div class="feature-desc">Auto-delivery with flexible scheduling</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🍫</div>
+            <div class="feature-title">Flavor Samples</div>
+            <div class="feature-desc">Try before committing to large sizes</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-accessories">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal('accessories')">×</button>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title">Accessories Flow</h2>
+          <p class="modal-subtitle">Complete your performance setup</p>
+        </div>
+
+        <div class="flow-preview">
+          <div class="flow-step">
+            <div class="flow-number">01</div>
+            <div class="flow-info">
+              <h3>Category Breakdown</h3>
+              <p>Bags (gym, duffel, backpack), Socks (performance, compression, casual), Headwear (caps, beanies, headbands), Hydration (bottles, shakers), Misc (towels, wraps, grips).</p>
+            </div>
+          </div>
+
+          <div class="flow-step">
+            <div class="flow-number">02</div>
+            <div class="flow-info">
+              <h3>Cross-Sell Integration</h3>
+              <p>"Complete your outfit" suggestions based on cart contents. If buying shoes → suggest performance socks. If buying protein → suggest shaker bottle.</p>
+            </div>
+          </div>
+
+          <div class="flow-step">
+            <div class="flow-number">03</div>
+            <div class="flow-info">
+              <h3>Bundle Offers</h3>
+              <p>Pre-configured bundles: "Gym Starter Pack" (bag + bottle + towel), "Recovery Kit" (compression socks + foam roller + massage ball). One-click add to cart.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="feature-grid">
+          <div class="feature-item">
+            <div class="feature-icon">🎒</div>
+            <div class="feature-title">Bag Configurator</div>
+            <div class="feature-desc">Choose size, compartments, strap style</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🧦</div>
+            <div class="feature-title">Sock Packs</div>
+            <div class="feature-desc">Multi-pair bundles with mix-and-match</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🎁</div>
+            <div class="feature-title">Gift Bundles</div>
+            <div class="feature-desc">Pre-packaged sets for easy gifting</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🔗</div>
+            <div class="feature-title">Smart Upsells</div>
+            <div class="feature-desc">Context-aware product recommendations</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-equipment">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal('equipment')">×</button>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title">Equipment Flow</h2>
+          <p class="modal-subtitle">Training and recovery tools</p>
+        </div>
+
+        <div class="flow-preview">
+          <div class="flow-step">
+            <div class="flow-number">01</div>
+            <div class="flow-info">
+              <h3>Equipment Categories</h3>
+              <p>Training (resistance bands, sliders, jump ropes), Recovery (foam rollers, massage guns, stretching tools), Performance (speed ladder, cones, agility gear).</p>
+            </div>
+          </div>
+
+          <div class="flow-step">
+            <div class="flow-number">02</div>
+            <div class="flow-info">
+              <h3>Video Demonstrations</h3>
+              <p>Each product has usage videos embedded. "How to use" tutorials auto-play on hover. Workout routine PDFs downloadable with purchase.</p>
+            </div>
+          </div>
+
+          <div class="flow-step">
+            <div class="flow-number">03</div>
+            <div class="flow-info">
+              <h3>Home Gym Builder</h3>
+              <p>Tool to build complete home gym setup. Budget selector, space constraints input. Generates equipment recommendations with total cost breakdown.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="feature-grid">
+          <div class="feature-item">
+            <div class="feature-icon">🎥</div>
+            <div class="feature-title">Video Guides</div>
+            <div class="feature-desc">Exercise tutorials for each piece of equipment</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🏠</div>
+            <div class="feature-title">Gym Builder</div>
+            <div class="feature-desc">Plan complete home gym setup by budget</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">📱</div>
+            <div class="feature-title">Workout PDFs</div>
+            <div class="feature-desc">Free training programs with equipment purchase</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">⚙️</div>
+            <div class="feature-title">Warranty</div>
+            <div class="feature-desc">Extended coverage on training equipment</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function scrollToCategories() {
+      document.getElementById('categories').scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+
+    function openModal(modalId) {
+      const modal = document.getElementById('modal-' + modalId);
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal(modalId) {
+      const modal = document.getElementById('modal-' + modalId);
+      modal.classList.remove('active');
+      document.body.style.overflow = 'auto';
+    }
+
+    // Close modal on overlay click
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) {
+          overlay.classList.remove('active');
+          document.body.style.overflow = 'auto';
+        }
+      });
+    });
+
+    // ESC key to close modal
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.modal-overlay.active').forEach(modal => {
+          modal.classList.remove('active');
+          document.body.style.overflow = 'auto';
+        });
+      }
+    });
+
+    // Stagger animation for category cards
+    window.addEventListener('load', () => {
+      const cards = document.querySelectorAll('.category-card');
+      cards.forEach((card, index) => {
+        card.style.animation = `fadeInUp 0.6s ${index * 0.1}s cubic-bezier(0.4, 0, 0.2, 1) backwards`;
+      });
+    });
+  </script>
+
+</body>
+</html>
