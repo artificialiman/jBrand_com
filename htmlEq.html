@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTML, Reduced to Sums & Differences — Regal Edition</title>
+
+  <!-- Google Fonts: Cormorant Garamond for serif, JetBrains Mono for code -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Highlight.js: Atom One Dark (matches the regal dark theme) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      hljs.highlightAll();
+    });
+  </script>
+
+  <style>
+    /* ----- reset & base ----- */
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #0d0b1a;
+      /* deep royal night */
+      font-family: 'Cormorant Garamond', 'Georgia', 'Times New Roman', serif;
+      color: #e8e0d4;
+      padding: 2rem 1.5rem;
+      line-height: 1.7;
+      display: flex;
+      justify-content: center;
+    }
+
+    .book {
+      max-width: 1100px;
+      width: 100%;
+      background: #16132b;
+      /* dark regal parchment */
+      border-radius: 28px;
+      padding: 3.5rem 4rem 4rem 4rem;
+      box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.8),
+        0 0 0 1px rgba(212, 168, 75, 0.15),
+        inset 0 0 120px rgba(212, 168, 75, 0.03);
+      border: 1px solid rgba(212, 168, 75, 0.12);
+      position: relative;
+    }
+
+    /* ----- gold ornamental top border ----- */
+    .book::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 10%;
+      right: 10%;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, #d4a84b, #f0d080, #d4a84b, transparent);
+      border-radius: 0 0 4px 4px;
+      opacity: 0.7;
+    }
+
+    /* ----- typography ----- */
+    h1,
+    h2,
+    h3,
+    h4,
+    h5 {
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: #f0e6d4;
+      margin-top: 2.4rem;
+      margin-bottom: 0.8rem;
+      line-height: 1.3;
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      text-align: center;
+      letter-spacing: 0.06em;
+      margin-top: 0.2rem;
+      margin-bottom: 0.4rem;
+      color: #f0e0c8;
+      text-shadow: 0 2px 12px rgba(212, 168, 75, 0.15);
+    }
+
+    h1 .subtitle {
+      display: block;
+      font-size: 1.1rem;
+      font-weight: 400;
+      letter-spacing: 0.15em;
+      color: #b8a888;
+      margin-top: 0.2rem;
+      text-shadow: none;
+    }
+
+    h1 .gold-ornament {
+      display: block;
+      font-size: 1.6rem;
+      color: #d4a84b;
+      letter-spacing: 0.3em;
+      opacity: 0.5;
+      margin-top: 0.1rem;
+    }
+
+    h2 {
+      font-size: 2rem;
+      border-bottom: 1px solid rgba(212, 168, 75, 0.2);
+      padding-bottom: 0.3rem;
+      margin-top: 3rem;
+      color: #e8ddcc;
+    }
+
+    h2 .section-number {
+      color: #d4a84b;
+      font-weight: 400;
+      margin-right: 0.5rem;
+      opacity: 0.7;
+    }
+
+    h3 {
+      font-size: 1.5rem;
+      margin-top: 2rem;
+      color: #ddd0bc;
+    }
+
+    h4 {
+      font-size: 1.2rem;
+      margin-top: 1.6rem;
+      color: #d0c0aa;
+      font-weight: 500;
+    }
+
+    p {
+      margin-bottom: 0.8rem;
+      color: #ddd6c8;
+    }
+
+    /* ----- decorative divider ----- */
+    .divider {
+      text-align: center;
+      margin: 2.8rem 0 2.2rem 0;
+      color: #d4a84b;
+      font-size: 1.8rem;
+      letter-spacing: 0.4em;
+      opacity: 0.35;
+      font-weight: 300;
+    }
+    .divider-light {
+      opacity: 0.2;
+      font-size: 1.4rem;
+      margin: 2rem 0 1.6rem 0;
+    }
+
+    /* ----- code blocks (highlight.js wrapper) ----- */
+    pre {
+      background: #0e0c1e !important;
+      border-radius: 14px;
+      padding: 1.2rem 1.6rem !important;
+      margin: 1.2rem 0 1.6rem 0;
+      border: 1px solid rgba(212, 168, 75, 0.10);
+      box-shadow: inset 0 2px 20px rgba(0, 0, 0, 0.5), 0 4px 20px rgba(0, 0, 0, 0.3);
+      font-size: 0.92rem;
+      line-height: 1.65;
+      overflow-x: auto;
+      font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+    }
+
+    code {
+      font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+      font-size: 0.9em;
+      background: rgba(212, 168, 75, 0.06);
+      padding: 0.1rem 0.4rem;
+      border-radius: 4px;
+      color: #e8ddcc;
+    }
+
+    pre code {
+      background: transparent;
+      padding: 0;
+      border-radius: 0;
+      color: inherit;
+      font-size: 0.92rem;
+    }
+
+    /* inline code in regular text */
+    p code,
+    li code,
+    .callout code {
+      background: rgba(212, 168, 75, 0.08);
+      padding: 0.1rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.88em;
+      color: #f0e0c8;
+      border: 1px solid rgba(212, 168, 75, 0.06);
+    }
+
+    /* ----- callout / warning blocks ----- */
+    .callout {
+      background: rgba(212, 168, 75, 0.04);
+      border-left: 4px solid #d4a84b;
+      padding: 1rem 1.6rem;
+      margin: 1.2rem 0 1.6rem 0;
+      border-radius: 0 12px 12px 0;
+      color: #ddd0bc;
+      box-shadow: inset 0 1px 0 rgba(212, 168, 75, 0.05);
+    }
+
+    .callout.warning {
+      border-left-color: #e06c75;
+      background: rgba(224, 108, 117, 0.05);
+    }
+
+    .callout.external {
+      border-left-color: #61afef;
+      background: rgba(97, 175, 239, 0.04);
+    }
+
+    .callout.memorize {
+      border-left-color: #98c379;
+      background: rgba(152, 195, 121, 0.04);
+    }
+
+    .callout .label {
+      font-weight: 600;
+      color: #d4a84b;
+      display: block;
+      margin-bottom: 0.2rem;
+      font-size: 0.85rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      opacity: 0.8;
+    }
+
+    .callout.warning .label {
+      color: #e06c75;
+    }
+    .callout.external .label {
+      color: #61afef;
+    }
+    .callout.memorize .label {
+      color: #98c379;
+    }
+
+    /* ----- tables (memorization) ----- */
+    .table-wrap {
+      overflow-x: auto;
+      margin: 1.2rem 0 1.8rem 0;
+      border-radius: 12px;
+      border: 1px solid rgba(212, 168, 75, 0.08);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+      background: rgba(13, 11, 26, 0.4);
+    }
+
+    th,
+    td {
+      padding: 0.7rem 1.2rem;
+      text-align: left;
+      border-bottom: 1px solid rgba(212, 168, 75, 0.06);
+    }
+
+    th {
+      background: rgba(212, 168, 75, 0.06);
+      color: #d4a84b;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    td code {
+      background: rgba(212, 168, 75, 0.05);
+      padding: 0.1rem 0.4rem;
+      border-radius: 3px;
+      font-size: 0.85em;
+    }
+
+    /* ----- lists ----- */
+    ul,
+    ol {
+      margin: 0.6rem 0 1.2rem 1.6rem;
+      color: #ddd6c8;
+    }
+
+    li {
+      margin-bottom: 0.3rem;
+    }
+
+    li code {
+      font-size: 0.88em;
+    }
+
+    /* ----- special inline symbols ----- */
+    .gold-icon {
+      color: #d4a84b;
+      font-weight: 400;
+    }
+
+    .warn-icon {
+      color: #e06c75;
+    }
+
+    .order-icon {
+      color: #61afef;
+    }
+
+    .false-cognate {
+      color: #c678dd;
+      font-weight: 500;
+    }
+
+    .external-icon {
+      color: #61afef;
+    }
+
+    .section-ref {
+      color: #d4a84b;
+      font-weight: 400;
+      opacity: 0.7;
+    }
+
+    /* ----- quote / epigraph style ----- */
+    .epigraph {
+      font-style: italic;
+      color: #b8a888;
+      text-align: center;
+      font-size: 1.1rem;
+      padding: 0.8rem 2rem;
+      margin: 1.2rem 0 2rem 0;
+      border-top: 1px solid rgba(212, 168, 75, 0.10);
+      border-bottom: 1px solid rgba(212, 168, 75, 0.10);
+      letter-spacing: 0.02em;
+    }
+
+    /* ----- responsive ----- */
+    @media (max-width: 768px) {
+      body {
+        padding: 0.8rem;
+      }
+      .book {
+        padding: 1.8rem 1.4rem 2.4rem 1.4rem;
+        border-radius: 18px;
+      }
+      h1 {
+        font-size: 2rem;
+      }
+      h2 {
+        font-size: 1.6rem;
+      }
+      h3 {
+        font-size: 1.3rem;
+      }
+      pre {
+        padding: 0.8rem 1rem !important;
+        font-size: 0.8rem;
+      }
+      .callout {
+        padding: 0.8rem 1.2rem;
+      }
+      .book::before {
+        left: 5%;
+        right: 5%;
+      }
+      table {
+        font-size: 0.85rem;
+      }
+      th,
+      td {
+        padding: 0.5rem 0.8rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .book {
+        padding: 1.2rem 0.8rem 1.8rem 0.8rem;
+      }
+      h1 {
+        font-size: 1.6rem;
+      }
+      h2 {
+        font-size: 1.3rem;
+      }
+      h3 {
+        font-size: 1.1rem;
+      }
+      pre {
+        font-size: 0.72rem;
+        padding: 0.6rem 0.8rem !important;
+      }
+      ul,
+      ol {
+        margin-left: 1rem;
+      }
+    }
+
+    /* ----- print-friendly tweaks ----- */
+    @media print {
+      body {
+        background: #fff;
+        padding: 0.5in;
+      }
+      .book {
+        background: #fff;
+        box-shadow: none;
+        border: 1px solid #ccc;
+        padding: 0.5in;
+        border-radius: 0;
+      }
+      .book::before {
+        display: none;
+      }
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      p,
+      li,
+      .callout {
+        color: #1a1a2e;
+      }
+      .callout {
+        background: #f6f4f0;
+        border-left-color: #b8a888;
+      }
+      pre {
+        background: #f6f4f0 !important;
+        border: 1px solid #ddd;
+        box-shadow: none;
+      }
+      code {
+        color: #1a1a2e;
+      }
+      .gold-icon,
+      .section-ref {
+        color: #b8860b;
+      }
+      .warn-icon {
+        color: #c0392b;
+      }
+      .order-icon {
+        color: #2980b9;
+      }
+      .false-cognate {
+        color: #8e44ad;
+      }
+      table {
+        background: #faf8f5;
+      }
+      th {
+        background: #eee8e0;
+        color: #1a1a2e;
+      }
+      td {
+        border-bottom-color: #ddd;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="book">
+
+    <!-- ============ TITLE ============ -->
+    <h1>
+      HTML, Reduced to Sums &amp; Differences
+      <span class="subtitle">A Regal Compendium of Structure, Not State</span>
+      <span class="gold-ornament">✦ ✦ ✦</span>
+    </h1>
+
+    <div class="epigraph">
+      <span style="color:#d4a84b; opacity:0.5;">❝</span>
+      HTML's currency is <em>structure</em> — no state, no execution order, no energy transfer.
+      Where HTML genuinely has nothing — no reactivity, no acid, no redox of its own —
+      that absence is stated plainly, not skipped, because the absence is itself the teaching point
+      for the Python half of this project.
+      <span style="color:#d4a84b; opacity:0.5;">❞</span>
+    </div>
+
+    <!-- ============ FLAGS ============ -->
+    <div style="margin: 1.8rem 0 1.2rem 0; padding: 1.2rem 1.8rem; background: rgba(212,168,75,0.03); border-radius: 16px; border: 1px solid rgba(212,168,75,0.06);">
+      <p style="font-size:0.95rem; color:#b8a888; margin-bottom:0.4rem; letter-spacing:0.04em; text-transform:uppercase; font-weight:600;">Flags in this volume</p>
+      <ul style="margin:0.2rem 0 0 1.2rem; font-size:0.95rem; list-style:none; padding-left:0;">
+        <li style="margin-bottom:0.3rem;"><span class="gold-icon">▸</span> <code style="background:rgba(212,168,75,0.06); padding:0.1rem 0.5rem; border-radius:4px;">&gt;</code> — memorization table, real exception, or mechanism note</li>
+        <li style="margin-bottom:0.3rem;"><span class="warn-icon">▸</span> <span class="false-cognate">⚠ FALSE COGNATE</span> — same symbol/word will reappear in Python meaning something unrelated</li>
+        <li style="margin-bottom:0.3rem;"><span class="external-icon">▸</span> <span class="false-cognate">⚠ EXTERNAL ONLY</span> — HTML admits it cannot do this itself and must borrow behavior</li>
+      </ul>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 1                                                     -->
+    <!-- ============================================================ -->
+    <h2><span class="section-number">§1.</span> Core Build</h2>
+
+    <h3>Element</h3>
+    <pre><code class="language-html">&lt;p&gt;Content&lt;/p&gt; = Element</code></pre>
+
+    <h3>Attributes (a property added to the atom, not a new atom)</h3>
+    <pre><code class="language-html">&lt;div class="card"&gt; = Element + Attribute (class = "card")</code></pre>
+    <p style="font-size:0.95rem;">
+      An attribute doesn't change what an element is (a <code>div</code> is still a <code>div</code>),
+      only how it's later treated by CSS/JS — same spirit as chemistry's isotopes:
+      same core identity, different accompanying detail.
+    </p>
+
+    <h3>Void elements (no closing tag — a real exception, not a shortcut)</h3>
+    <pre><code class="language-html">&lt;img&gt;, &lt;br&gt;, &lt;hr&gt;, &lt;input&gt;, &lt;meta&gt;, &lt;link&gt; = Void Elements</code></pre>
+    <div class="callout warning">
+      <span class="label">⚠ FALSE COGNATE</span>
+      <code>&lt;br&gt;</code> reads like an instruction (“break here”), but it's still just a tag —
+      no HTML element ever executes anything. The verb-like names are English convenience,
+      not a command being carried out. Python's imperative keywords will NOT share this property —
+      this is the seam to watch for later.
+    </div>
+
+    <div class="callout memorize">
+      <span class="label">&gt; Memorization table</span>
+      No equation derives which elements are void:
+      <code style="background:transparent; border: none; color: #e8ddcc;">area, base, br, col, embed, hr, img, input, link, meta, param, source, track, wbr</code>
+    </div>
+
+    <h3>Nesting (atoms containing atoms)</h3>
+    <pre><code class="language-html">&lt;div&gt;&lt;p&gt;text&lt;/p&gt;&lt;/div&gt; = div is Parent, p is Child</code></pre>
+    <p style="font-size:0.95rem;">
+      Same-level Elements (share one Parent) = <strong>Siblings</strong>.
+    </p>
+
+    <div class="divider">✦ ✦ ✦</div>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 2                                                     -->
+    <!-- ============================================================ -->
+    <h2><span class="section-number">§2.</span> Document Skeleton</h2>
+
+    <p style="font-size:0.95rem; color:#b8a888; margin-bottom:1.2rem;">
+      Closes the loop on Core Build — the required scaffold every page needs.
+    </p>
+
+    <pre><code class="language-html">&lt;!DOCTYPE html&gt; = Document Type Declaration (not a tag — a signal to the browser, once, first line only)
+&lt;html&gt; = Root Element (everything else nests inside this one)
+&lt;head&gt; + &lt;body&gt; = the only two children &lt;html&gt; is supposed to have</code></pre>
+
+    <div class="callout warning">
+      <span class="label">⚠ FALSE COGNATE</span>
+      <code>&lt;head&gt;</code> and <code>&lt;body&gt;</code> sound anatomical/sequential —
+      they are <strong>not</strong> “head happens first, body happens after” in any time-based sense.
+      Both exist simultaneously the instant the page loads; the ordering is structural
+      (metadata-container vs content-container), not temporal. This matters a lot once Python enters,
+      where top-to-bottom order genuinely does mean “happens first.”
+    </div>
+
+    <h3>Metadata family</h3>
+    <p style="font-size:0.95rem;">All live inside <code>&lt;head&gt;</code>, none of them render.</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Tag</th><th>Purpose</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>&lt;title&gt;</code></td><td>Text shown in browser tab / bookmark</td></tr>
+          <tr><td><code>&lt;meta charset="UTF-8"&gt;</code></td><td>Tells the browser which character set to expect</td></tr>
+          <tr><td><code>&lt;meta name="viewport" ...&gt;</code></td><td>Tells mobile browsers how to scale the page</td></tr>
+          <tr><td><code>&lt;link rel="stylesheet" href="..."&gt;</code></td><td><span class="external-icon">⚠ EXTERNAL ONLY</span> — pulls in CSS from outside</td></tr>
+          <tr><td><code>&lt;script src="..."&gt;</code></td><td><span class="external-icon">⚠ EXTERNAL ONLY</span> — pulls in JS from outside</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout external">
+      <span class="label">⚠ EXTERNAL ONLY</span>
+      <code>&lt;link&gt;</code> and <code>&lt;script src&gt;</code> are the two places HTML openly admits
+      it cannot do something itself. They are not HTML's version of an acid — they are the hole in the
+      beaker where an external acid gets poured in. See Section 5 for why this matters structurally.
+    </div>
+
+    <div class="divider">✦ ✦ ✦</div>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 3                                                     -->
+    <!-- ============================================================ -->
+    <h2><span class="section-number">§3.</span> Text &amp; Semantic Content</h2>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Tag</th><th>Meaning</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>&lt;h1&gt;</code> through <code>&lt;h6&gt;</code></td><td>Heading (1 = most important, 6 = least)</td></tr>
+          <tr><td><code>&lt;p&gt;</code></td><td>Paragraph (one block of prose)</td></tr>
+          <tr><td><code>&lt;a href="..."&gt;</code></td><td>Anchor (a link <strong>out</strong> of this document)</td></tr>
+          <tr><td><code>&lt;strong&gt;</code>, <code>&lt;em&gt;</code></td><td>Semantic emphasis (meaning: “this matters” / “this is stressed”)</td></tr>
+          <tr><td><code>&lt;b&gt;</code>, <code>&lt;i&gt;</code></td><td>Visual-only styling (bold/italic appearance, no meaning attached)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p style="font-size:0.95rem;">
+      Real distinction, easy to conflate: <code>&lt;strong&gt;</code> and <code>&lt;b&gt;</code> can look
+      identical rendered, but only one of them carries meaning a screen reader or search engine will register.
+      Same trap as chemistry's Strength vs Concentration (§5 of the chemistry doc) — two things that look
+      the same from a distance are answering different questions.
+    </p>
+
+    <pre><code class="language-html">&lt;ul&gt; + &lt;li&gt; = Unordered List (bullet, no inherent sequence)
+&lt;ol&gt; + &lt;li&gt; = Ordered List (numbered, sequence is part of the meaning)</code></pre>
+
+    <div class="callout warning">
+      <span class="label">⚠ FALSE COGNATE</span>
+      “Ordered” here means displayed with a fixed sequence marker, not “executed in order.”
+      HTML has no execution at all — this is purely visual/semantic sequence, not the order-of-operations
+      sense the word will carry once Python arrives.
+    </div>
+
+    <pre><code class="language-html">&lt;table&gt; + &lt;tr&gt; + &lt;td&gt; = Table (rows, then cells inside rows)
+&lt;th&gt; = header cell (semantically a label, not just a styled cell)</code></pre>
+
+    <div class="divider">✦ ✦ ✦</div>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 4                                                     -->
+    <!-- ============================================================ -->
+    <h2><span class="section-number">§4.</span> Media &amp; Embedded Content</h2>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Tag</th><th>Purpose</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>&lt;img src="..." alt="..."&gt;</code></td><td>Image (src = what to show, alt = fallback description)</td></tr>
+          <tr><td><code>&lt;video src="..." controls&gt;</code></td><td>Video</td></tr>
+          <tr><td><code>&lt;audio src="..." controls&gt;</code></td><td>Audio</td></tr>
+          <tr><td><code>&lt;iframe src="..."&gt;</code></td><td><span class="external-icon">⚠ EXTERNAL ONLY</span> — an entire other webpage embedded inside this one</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout">
+      <span class="label">&gt; Honesty requirement</span>
+      <code>alt</code> is not decoration — it's the fallback content for anyone/anything that can't render
+      the image (screen readers, broken links, search crawlers). Dropping it isn't a style choice,
+      it's an accessibility gap. Same honesty-requirement as chemistry never letting “Insoluble” quietly
+      mean “impossible” instead of “solubility near zero.”
+    </div>
+
+    <div class="divider">✦ ✦ ✦</div>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 5                                                     -->
+    <!-- ============================================================ -->
+    <h2><span class="section-number">§5.</span> HTML's Bonding Equivalent — and where it structurally runs out</h2>
+
+    <p style="font-size:0.95rem; color:#b8a888; margin-bottom:1.2rem;">
+      This is the section where the chemistry parallel has to be stated honestly rather than forced.
+    </p>
+
+    <div class="callout">
+      <span class="label">Structural Bond</span>
+      <code>Element + Element (nested) = Structural Bond</code> (parent holds child — always present, HTML alone provides this)
+    </div>
+    <div class="callout external">
+      <span class="label">⚠ EXTERNAL ONLY</span>
+      <code>Element + CSS Rule = Styled Bond</code>
+    </div>
+    <div class="callout external">
+      <span class="label">⚠ EXTERNAL ONLY</span>
+      <code>Element + JS Event = Behavioral Bond</code>
+    </div>
+
+    <p style="font-size:0.95rem;">
+      Chemistry has three bonding types (covalent, ionic, metallic) that are all <em>internal</em> to the
+      atoms doing the bonding — the electrons involved belong to the atoms themselves.
+      HTML only ever has <strong>one</strong> bond type that is truly its own: structural nesting.
+      Every other kind of “bonding” a page needs (appearance, behavior) is borrowed wholesale from a
+      different language entirely. This is not a gap in this book's research — it is a true structural
+      fact about HTML.
+    </p>
+
+    <div class="callout" style="border-left-color: #d4a84b; background: rgba(212,168,75,0.06);">
+      <span class="label">HTML alone</span>
+      <strong>Structure only</strong>, no appearance rules, no behavior, no state.
+      <p style="margin-top:0.4rem; font-size:0.95rem;">
+        This is the single most important line in this section. A raw HTML file with no CSS and no JS
+        is not “basic” or “unfinished” — it is complete, on its own terms. HTML was never missing something;
+        it was never designed to have appearance or behavior in the first place. Compare: chemistry's
+        non-polar covalent bond is not a “weaker” ionic bond — it's a different, complete thing.
+      </p>
+    </div>
+
+    <div class="divider">✦ ✦ ✦</div>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 6                                                     -->
+    <!-- ============================================================ -->
+    <h2><span class="section-number">§6.</span> Acid / Base / Salt Equivalent — Deployment Role, not Reaction</h2>
+
+    <p style="font-size:0.95rem; color:#b8a888; margin-bottom:1.2rem;">
+      Per the working framework: this axis is not about a chemical property, it's about what role a piece
+      of code plays in its environment. HTML's honest position on this axis:
+    </p>
+
+    <div class="callout" style="border-left-color: #61afef; background: rgba(97,175,239,0.04);">
+      <span class="label">HTML Document = Base, always</span>
+      A pure receiver — accepts whatever is poured into it. HTML alone = never an Acid
+      (it has no mechanism to drive change into anything else).
+    </div>
+
+    <p style="font-size:0.95rem;">
+      HTML cannot act on another file, cannot mutate state, cannot trigger anything on its own.
+      It only ever receives — content poured in by a human author, styling poured in by CSS,
+      behavior poured in by JS. On the acid/base axis this book is building, HTML sits permanently
+      on the Base side. There is no “strong HTML” vs “weak HTML” the way there's strong/weak acid —
+      reactivity strength doesn't apply to something that never initiates a reaction in the first place.
+    </p>
+
+    <div class="callout">
+      <span class="label">Static HTML file, no build step = Salt equivalent</span>
+      Stable, sitting there, done. Templated HTML (rendered from data at build time) = still Salt —
+      the “reaction” already happened upstream.
+      <p style="margin-top:0.4rem; font-size:0.95rem;">
+        A plain <code>.html</code> file on disk is already the settled, stable “product” —
+        same rung as your report-card pages once generated. HTML never occupies the ester/precipitate/emulsion
+        distinctions on the vertical axis either — a saved <code>.html</code> file is about as close to
+        pure “dissolved into the filesystem, inert, done” as an artifact gets.
+      </p>
+    </div>
+
+    <div class="divider">✦ ✦ ✦</div>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 7                                                     -->
+    <!-- ============================================================ -->
+    <h2><span class="section-number">§7.</span> Redox Equivalent — Deferred, Correctly</h2>
+
+    <div class="callout" style="border-left-color: #888; background: rgba(255,255,255,0.02);">
+      <span class="label">HTML = no Reducing Agent, no Oxidizing Agent</span>
+      Redox is about electron transfer and agents named for their effect on something else.
+      HTML has no mechanism to transfer anything to anything — it does not act on other files,
+      other elements, or itself. There is no honest redox-equivalent content to put here for HTML alone.
+      <p style="margin-top:0.4rem; font-size:0.95rem;">
+        This section stays empty on purpose. It's the clearest, starkest statement in this whole book
+        of the thing you raised at the very start: chemistry vocabulary describes phenomena,
+        code vocabulary issues commands — and HTML, alone, issues none. This gap is where the Python book's
+        redox section will have its real content; flagging the gap here is more honest than padding it
+        with a forced analogy.
+      </p>
+    </div>
+
+    <div class="divider">✦ ✦ ✦</div>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 8                                                     -->
+    <!-- ============================================================ -->
+    <h2><span class="section-number">§8.</span> Thermodynamics Equivalent — Same Verdict, Same Honesty</h2>
+
+    <div class="callout" style="border-left-color: #888; background: rgba(255,255,255,0.02);">
+      <span class="label">HTML = no Spontaneity, no Combustion-equivalent, no Electrolysis-equivalent</span>
+      All three of the energy-economics categories (free/self-sustaining/forced) describe execution —
+      something happening over time, paid for somehow. HTML has no execution.
+      <p style="margin-top:0.4rem; font-size:0.95rem;">
+        A browser parsing HTML is the browser's activity, not HTML's — the same way a rock doesn't
+        “do” anything just because gravity is acting on it. This section, like Section 7, stays
+        deliberately blank. Two blank sections in a row is the honest shape of “declarative structure
+        has no engine,” not a failure to find a mapping.
+      </p>
+    </div>
+
+    <div class="divider">✦ ✦ ✦</div>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 9                                                     -->
+    <!-- ============================================================ -->
+    <h2><span class="section-number">§9.</span> Forms — the closest HTML gets to inviting a reaction</h2>
+
+    <p style="font-size:0.95rem; color:#b8a888; margin-bottom:1.2rem;">
+      If there is one place HTML gestures toward acid-like behavior without ever crossing into it,
+      it's forms — worth its own short section because it's the seam where user input threatens
+      to look like state.
+    </p>
+
+    <div class="callout external">
+      <span class="label">⚠ EXTERNAL ONLY</span>
+      <code>&lt;form action="..." method="..."&gt;</code> = a declared intention to send data somewhere
+      <p style="margin-top:0.4rem; font-size:0.95rem;">
+        <code>&lt;input&gt;</code>, <code>&lt;textarea&gt;</code>, <code>&lt;select&gt;</code> = fields
+        (hold a value, but do not act on it).
+        <br>
+        <code>&lt;button type="submit"&gt;</code> = a labeled invitation to trigger a submission.
+      </p>
+    </div>
+
+    <div class="callout">
+      <span class="label">&gt; Crucial honesty check</span>
+      The <code>&lt;form&gt;</code> tag does <strong>not</strong> send anything. It does not run.
+      It declares, in structure alone, “if a submission happens, send it here, this way” —
+      the actual sending is carried out by the browser as a program, external to HTML entirely.
+      Even the most action-shaped tag in the whole language stays inert on its own.
+      This is the strongest single piece of evidence in this book for the claim that chemistry
+      vocabulary codifies phenomena, code vocabulary commands machinery — and HTML sits right at
+      the edge of that boundary without ever actually stepping over it.
+    </div>
+
+    <div class="divider">✦ ✦ ✦</div>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 10                                                    -->
+    <!-- ============================================================ -->
+    <h2><span class="section-number">§10.</span> Distinguishing Pairs</h2>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Pair</th><th>Meaning</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>&lt;div&gt;</code> vs <code>&lt;span&gt;</code></td>
+            <td>Both meaningless containers; <code>div</code> = block-level (starts new line), <code>span</code> = inline (sits within text)</td>
+          </tr>
+          <tr>
+            <td><code>id</code> vs <code>class</code></td>
+            <td><code>id</code> = exactly one match per page, unique identity; <code>class</code> = many elements, shared identity</td>
+          </tr>
+          <tr>
+            <td><code>href</code> vs <code>src</code></td>
+            <td><code>href</code> = “go there instead” (a reference/link out); <code>src</code> = “bring that here and show it” (an embed)</td>
+          </tr>
+          <tr>
+            <td>Block-level vs Inline</td>
+            <td>Does it force a new line (block), or sit inside existing text flow (inline)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout warning">
+      <span class="label">⚠ FALSE COGNATE</span>
+      <code>id</code> sounds like a permanent, chemistry-style identity (like proton count),
+      but it is purely a lookup convenience — nothing enforces uniqueness except convention and tooling.
+      HTML will render a page with duplicate ids; it just breaks the assumption that CSS/JS rely on.
+      Not a hard law the way proton count is.
+    </div>
+
+    <div class="callout">
+      <span class="label">&gt; Easy to conflate</span>
+      <code>href</code> and <code>src</code> both take a URL. <code>href</code> never brings content into
+      this document; <code>src</code> always does. One is a pointer, the other is an import.
+    </div>
+
+    <div class="divider">✦ ✦ ✦</div>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 11                                                    -->
+    <!-- ============================================================ -->
+    <h2><span class="section-number">§11.</span> Attributes &amp; Values — HTML's “Mole &amp; Stoichiometry” Equivalent</h2>
+
+    <p style="font-size:0.95rem; color:#b8a888; margin-bottom:1.2rem;">
+      Chemistry's mole section is the bridge currency — the thing that makes every other section countable
+      and combinable. HTML's closest equivalent isn't a unit of measure; it's the <code>attribute=value</code>
+      pairing itself, because it's the one mechanism every single tag above relies on to carry any
+      configuration at all.
+    </p>
+
+    <pre><code class="language-html">Attribute Name + "=" + "Value" (in quotes) = Attribute-Value Pair
+class="card", href="page.html", alt="a description" = all the same underlying pattern</code></pre>
+
+    <div class="callout warning">
+      <span class="label">⚠ FALSE COGNATE — the most important one in this book</span>
+      <code>=</code> here means <strong>“this attribute HAS this value”</strong> — a static label,
+      decided once, sitting there. It is <strong>not</strong> assignment in any executable sense;
+      nothing is being computed or stored in memory. The identical glyph in Python will mean
+      “take whatever's on the right, store it under the name on the left, right now, at this specific
+      point in execution.” Same symbol, two completely unrelated jobs — the single clearest place
+      this whole book exists to catch you.
+    </div>
+
+    <div class="callout">
+      <span class="label">&gt; Multiple attributes on one element</span>
+      Space-separated, order does not matter.
+      <pre style="margin:0.4rem 0 0 0; background:transparent; padding:0 !important; box-shadow:none; border:none; border-radius:0; font-size:0.9rem;"><code class="language-html">&lt;img src="x.jpg" alt="a cat" width="200"&gt; = same as any reordering of those three</code></pre>
+      <p style="margin-top:0.4rem; font-size:0.95rem;">
+        Real contrast to flag now, cash in later: attribute order on one tag is irrelevant (declarative,
+        all-at-once). Argument order in a Python function call is <strong>not</strong> irrelevant unless
+        named explicitly. This is where “HTML as control group” pays off hardest — you already know
+        attribute order doesn't matter, so when Python parameter order suddenly does, that will register
+        as a felt violation, not just a rule to memorize.
+      </p>
+    </div>
+
+    <div class="divider">✦ ✦ ✦</div>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 12 — SUMMARY                                         -->
+    <!-- ============================================================ -->
+    <h2><span class="section-number">§12.</span> Summary for a New Reader</h2>
+
+    <div class="callout" style="border-left-color: #d4a84b; background: rgba(212,168,75,0.04); padding: 1.6rem 2rem;">
+      <p style="font-size:1.05rem; line-height:1.8;">
+        HTML is the one member of this planned book-pair that behaves almost exactly like a chemistry
+        equation system: <strong>pure structure</strong>, no hidden state, order mostly irrelevant,
+        nothing executes. Every section above that chemistry would normally fill with rich content —
+        redox, thermodynamics — stays honestly blank here, because HTML has no mechanism for the thing
+        those sections describe: driven change over time.
+      </p>
+      <p style="font-size:1.05rem; line-height:1.8; margin-top:0.8rem;">
+        Where HTML brushes up against acting (forms, <code>&lt;script src&gt;</code>, <code>&lt;link&gt;</code>),
+        it never actually crosses into acting itself — it only ever declares an intention or opens a door
+        for something external to act through.
+      </p>
+      <p style="font-size:1.05rem; line-height:1.8; margin-top:0.8rem;">
+        The one section carrying outsized weight for what comes next is Section 11: the <code>=</code> sign,
+        identical in appearance to Python's assignment operator, doing a completely different job.
+        That single collision is the seed of the whole reason this book exists — to use a language you
+        already know cold as the control group that catches Python's cracks the moment they appear.
+      </p>
+    </div>
+
+    <div class="divider" style="margin-top:3rem;">✦ ✦ ✦</div>
+    <p style="text-align:center; font-size:0.9rem; color:#b8a888; letter-spacing:0.1em; margin-top:0.5rem;">
+      <span style="color:#d4a84b; opacity:0.3;">❧</span>
+      &nbsp; finis &nbsp;
+      <span style="color:#d4a84b; opacity:0.3;">❧</span>
+    </p>
+
+  </div>
+  <!-- /.book -->
+
+</body>
+</html>

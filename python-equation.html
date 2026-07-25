@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Python, Reduced to Sums &amp; Differences — Regal Edition</title>
+
+    <!-- Highlight.js: Atom One Dark (complements the regal dark theme) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js">
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            hljs.highlightAll();
+        });
+    </script>
+
+    <style>
+        /* ----- reset & base ----- */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0d0b1a;
+            /* deep royal night */
+            font-family: 'Cormorant Garamond', 'Georgia', 'Times New Roman', serif;
+            color: #e8e0d4;
+            padding: 2rem 1.5rem;
+            line-height: 1.7;
+            display: flex;
+            justify-content: center;
+        }
+
+        .book {
+            max-width: 1100px;
+            width: 100%;
+            background: #16132b;
+            /* dark regal parchment */
+            border-radius: 28px;
+            padding: 3.5rem 4rem 4rem 4rem;
+            box-shadow:
+                0 20px 60px rgba(0, 0, 0, 0.8),
+                0 0 0 1px rgba(212, 168, 75, 0.15),
+                inset 0 0 120px rgba(212, 168, 75, 0.03);
+            border: 1px solid rgba(212, 168, 75, 0.12);
+            position: relative;
+        }
+
+        /* ----- gold ornamental top border ----- */
+        .book::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 10%;
+            right: 10%;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, #d4a84b, #f0d080, #d4a84b, transparent);
+            border-radius: 0 0 4px 4px;
+            opacity: 0.7;
+        }
+
+        /* ----- typography ----- */
+        h1,
+        h2,
+        h3,
+        h4,
+        h5 {
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            color: #f0e6d4;
+            margin-top: 2.4rem;
+            margin-bottom: 0.8rem;
+            line-height: 1.3;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            text-align: center;
+            letter-spacing: 0.06em;
+            margin-top: 0.2rem;
+            margin-bottom: 0.4rem;
+            color: #f0e0c8;
+            text-shadow: 0 2px 12px rgba(212, 168, 75, 0.15);
+        }
+
+        h1 .subtitle {
+            display: block;
+            font-size: 1.1rem;
+            font-weight: 400;
+            letter-spacing: 0.15em;
+            color: #b8a888;
+            margin-top: 0.2rem;
+            text-shadow: none;
+        }
+
+        h1 .gold-ornament {
+            display: block;
+            font-size: 1.6rem;
+            color: #d4a84b;
+            letter-spacing: 0.3em;
+            opacity: 0.5;
+            margin-top: 0.1rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+            border-bottom: 1px solid rgba(212, 168, 75, 0.2);
+            padding-bottom: 0.3rem;
+            margin-top: 3rem;
+            color: #e8ddcc;
+        }
+
+        h2 .section-number {
+            color: #d4a84b;
+            font-weight: 400;
+            margin-right: 0.5rem;
+            opacity: 0.7;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            margin-top: 2rem;
+            color: #ddd0bc;
+        }
+
+        h4 {
+            font-size: 1.2rem;
+            margin-top: 1.6rem;
+            color: #d0c0aa;
+            font-weight: 500;
+        }
+
+        p {
+            margin-bottom: 0.8rem;
+            color: #ddd6c8;
+        }
+
+        a {
+            color: #d4a84b;
+            text-decoration: none;
+            border-bottom: 1px dotted rgba(212, 168, 75, 0.3);
+            transition: border-color 0.2s;
+        }
+
+        a:hover {
+            border-bottom-color: #d4a84b;
+        }
+
+        /* ----- decorative divider ----- */
+        .divider {
+            text-align: center;
+            margin: 2.8rem 0 2.2rem 0;
+            color: #d4a84b;
+            font-size: 1.8rem;
+            letter-spacing: 0.4em;
+            opacity: 0.35;
+            font-weight: 300;
+        }
+        .divider-light {
+            opacity: 0.2;
+            font-size: 1.4rem;
+            margin: 2rem 0 1.6rem 0;
+        }
+
+        /* ----- code blocks (highlight.js wrapper) ----- */
+        pre {
+            background: #0e0c1e !important;
+            border-radius: 14px;
+            padding: 1.2rem 1.6rem !important;
+            margin: 1.2rem 0 1.6rem 0;
+            border: 1px solid rgba(212, 168, 75, 0.10);
+            box-shadow: inset 0 2px 20px rgba(0, 0, 0, 0.5), 0 4px 20px rgba(0, 0, 0, 0.3);
+            font-size: 0.92rem;
+            line-height: 1.65;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+        }
+
+        code {
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9em;
+            background: rgba(212, 168, 75, 0.06);
+            padding: 0.1rem 0.4rem;
+            border-radius: 4px;
+            color: #e8ddcc;
+        }
+
+        pre code {
+            background: transparent;
+            padding: 0;
+            border-radius: 0;
+            color: inherit;
+            font-size: 0.92rem;
+        }
+
+        /* inline code in regular text */
+        p code,
+        li code,
+        .callout code {
+            background: rgba(212, 168, 75, 0.08);
+            padding: 0.1rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.88em;
+            color: #f0e0c8;
+            border: 1px solid rgba(212, 168, 75, 0.06);
+        }
+
+        /* ----- callout / warning blocks ----- */
+        .callout {
+            background: rgba(212, 168, 75, 0.04);
+            border-left: 4px solid #d4a84b;
+            padding: 1rem 1.6rem;
+            margin: 1.2rem 0 1.6rem 0;
+            border-radius: 0 12px 12px 0;
+            color: #ddd0bc;
+            box-shadow: inset 0 1px 0 rgba(212, 168, 75, 0.05);
+        }
+
+        .callout.warning {
+            border-left-color: #e06c75;
+            background: rgba(224, 108, 117, 0.05);
+        }
+
+        .callout.important {
+            border-left-color: #61afef;
+            background: rgba(97, 175, 239, 0.04);
+        }
+
+        .callout.memorize {
+            border-left-color: #98c379;
+            background: rgba(152, 195, 121, 0.04);
+        }
+
+        .callout .label {
+            font-weight: 600;
+            color: #d4a84b;
+            display: block;
+            margin-bottom: 0.2rem;
+            font-size: 0.85rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            opacity: 0.7;
+        }
+
+        .callout.warning .label {
+            color: #e06c75;
+        }
+        .callout.important .label {
+            color: #61afef;
+        }
+        .callout.memorize .label {
+            color: #98c379;
+        }
+
+        /* ----- tables (memorization) ----- */
+        .table-wrap {
+            overflow-x: auto;
+            margin: 1.2rem 0 1.8rem 0;
+            border-radius: 12px;
+            border: 1px solid rgba(212, 168, 75, 0.08);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+            background: rgba(13, 11, 26, 0.4);
+        }
+
+        th,
+        td {
+            padding: 0.7rem 1.2rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(212, 168, 75, 0.06);
+        }
+
+        th {
+            background: rgba(212, 168, 75, 0.06);
+            color: #d4a84b;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        td code {
+            background: rgba(212, 168, 75, 0.05);
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            font-size: 0.85em;
+        }
+
+        /* ----- lists ----- */
+        ul,
+        ol {
+            margin: 0.6rem 0 1.2rem 1.6rem;
+            color: #ddd6c8;
+        }
+
+        li {
+            margin-bottom: 0.3rem;
+        }
+
+        li code {
+            font-size: 0.88em;
+        }
+
+        /* ----- special inline symbols ----- */
+        .gold-icon {
+            color: #d4a84b;
+            font-weight: 400;
+        }
+
+        .warn-icon {
+            color: #e06c75;
+        }
+
+        .order-icon {
+            color: #61afef;
+        }
+
+        .false-cognate {
+            color: #c678dd;
+            font-weight: 500;
+        }
+
+        .section-ref {
+            color: #d4a84b;
+            font-weight: 400;
+            opacity: 0.7;
+        }
+
+        /* ----- quote / epigraph style ----- */
+        .epigraph {
+            font-style: italic;
+            color: #b8a888;
+            text-align: center;
+            font-size: 1.1rem;
+            padding: 0.8rem 2rem;
+            margin: 1.2rem 0 2rem 0;
+            border-top: 1px solid rgba(212, 168, 75, 0.10);
+            border-bottom: 1px solid rgba(212, 168, 75, 0.10);
+            letter-spacing: 0.02em;
+        }
+
+        /* ----- responsive ----- */
+        @media (max-width: 768px) {
+            body {
+                padding: 0.8rem;
+            }
+            .book {
+                padding: 1.8rem 1.4rem 2.4rem 1.4rem;
+                border-radius: 18px;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+            h2 {
+                font-size: 1.6rem;
+            }
+            h3 {
+                font-size: 1.3rem;
+            }
+            pre {
+                padding: 0.8rem 1rem !important;
+                font-size: 0.8rem;
+            }
+            .callout {
+                padding: 0.8rem 1.2rem;
+            }
+            .book::before {
+                left: 5%;
+                right: 5%;
+            }
+            table {
+                font-size: 0.85rem;
+            }
+            th,
+            td {
+                padding: 0.5rem 0.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .book {
+                padding: 1.2rem 0.8rem 1.8rem 0.8rem;
+            }
+            h1 {
+                font-size: 1.6rem;
+            }
+            h2 {
+                font-size: 1.3rem;
+            }
+            h3 {
+                font-size: 1.1rem;
+            }
+            pre {
+                font-size: 0.72rem;
+                padding: 0.6rem 0.8rem !important;
+            }
+            ul,
+            ol {
+                margin-left: 1rem;
+            }
+        }
+
+        /* ----- print-friendly tweaks ----- */
+        @media print {
+            body {
+                background: #fff;
+                padding: 0.5in;
+            }
+            .book {
+                background: #fff;
+                box-shadow: none;
+                border: 1px solid #ccc;
+                padding: 0.5in;
+                border-radius: 0;
+            }
+            .book::before {
+                display: none;
+            }
+            h1,
+            h2,
+            h3,
+            h4,
+            h5,
+            p,
+            li,
+            .callout {
+                color: #1a1a2e;
+            }
+            .callout {
+                background: #f6f4f0;
+                border-left-color: #b8a888;
+            }
+            pre {
+                background: #f6f4f0 !important;
+                border: 1px solid #ddd;
+                box-shadow: none;
+            }
+            code {
+                color: #1a1a2e;
+            }
+            .gold-icon,
+            .section-ref {
+                color: #b8860b;
+            }
+            .warn-icon {
+                color: #c0392b;
+            }
+            .order-icon {
+                color: #2980b9;
+            }
+            .false-cognate {
+                color: #8e44ad;
+            }
+            table {
+                background: #faf8f5;
+            }
+            th {
+                background: #eee8e0;
+                color: #1a1a2e;
+            }
+            td {
+                border-bottom-color: #ddd;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="book">
+
+        <!-- ============ TITLE ============ -->
+        <h1>
+            Python, Reduced to Sums &amp; Differences
+            <span class="subtitle">A Regal Compendium of Execution, State, and Order</span>
+            <span class="gold-ornament">✦ ✦ ✦</span>
+        </h1>
+
+        <div class="epigraph">
+            <span style="color:#d4a84b; opacity:0.5;">❝</span>
+            Same compressed‑equation style as the chemistry and HTML books — but Python's currency is
+            <em>different in kind</em>, not just degree.
+            <span style="color:#d4a84b; opacity:0.5;">❞</span>
+        </div>
+
+        <!-- ============ FLAGS ============ -->
+        <div style="margin: 1.8rem 0 1.2rem 0; padding: 1.2rem 1.8rem; background: rgba(212,168,75,0.03); border-radius: 16px; border: 1px solid rgba(212,168,75,0.06);">
+            <p style="font-size:0.95rem; color:#b8a888; margin-bottom:0.4rem; letter-spacing:0.04em; text-transform:uppercase; font-weight:600;">Flags in this volume</p>
+            <ul style="margin:0.2rem 0 0 1.2rem; font-size:0.95rem; list-style:none; padding-left:0;">
+                <li style="margin-bottom:0.3rem;"><span class="gold-icon">▸</span> <code style="background:rgba(212,168,75,0.06); padding:0.1rem 0.5rem; border-radius:4px;">&gt;</code> — memorization table, real exception, mechanism note</li>
+                <li style="margin-bottom:0.3rem;"><span class="warn-icon">▸</span> <span class="false-cognate">⚠ FALSE COGNATE (HTML §<em>n</em>)</span> — same symbol/word, unrelated job</li>
+                <li style="margin-bottom:0.3rem;"><span class="order-icon">▸</span> <span class="false-cognate">⚠ ORDER/STATE</span> — meaning depends on <em>when</em> it runs and <em>what ran before</em></li>
+            </ul>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- SECTION 1                                                     -->
+        <!-- ============================================================ -->
+        <h2><span class="section-number">§1.</span> Core Build</h2>
+
+        <div class="callout">
+            <span class="label">⚠ FALSE COGNATE (HTML §1)</span>
+            HTML tags look like commands (<code>&lt;br&gt;</code> reads like “break here”) but never execute.
+            Python keywords (<code>if</code>, <code>for</code>, <code>def</code>, <code>return</code>) are the real thing —
+            HTML's tag‑verbs only impersonated. These genuinely cause something to happen, in a specific place
+            in the running program, at a specific time.
+        </div>
+
+        <h3>Statement</h3>
+        <pre><code class="language-python"># Keyword + Expression + Colon + Indented Block = Statement
+if condition:
+    do_something()</code></pre>
+
+        <h3>Assignment — the line HTML's Section 11 warned about</h3>
+        <pre><code class="language-python"># Name + "=" + Value = Assignment
+x = 5</code></pre>
+
+        <div class="callout warning">
+            <span class="label">⚠ FALSE COGNATE (HTML §11) — CASHED IN</span>
+            HTML's <code>=</code> meant “this attribute permanently has this value,” decided once,
+            no computation, no memory. Python's <code>=</code> means: evaluate the right side <em>right now</em>,
+            store the result under the name on the left, <em>at this exact point in execution</em>.
+            Same glyph, unrelated job. This is the single collision the whole two‑book project was built
+            to make you feel, not just know.
+        </div>
+
+        <div class="callout important">
+            <span class="label">⚠ ORDER/STATE</span>
+            <pre style="margin:0.4rem 0 0 0; background:transparent; padding:0 !important; box-shadow:none; border:none; border-radius:0; font-size:0.9rem;"><code class="language-python">x = 5
+x = x + 1   # x is 6</code></pre>
+            <pre style="margin:0.2rem 0 0 0; background:transparent; padding:0 !important; box-shadow:none; border:none; border-radius:0; font-size:0.9rem;"><code class="language-python">x = x + 1
+x = 5       # x is 5</code></pre>
+            <p style="margin-top:0.4rem; font-size:0.95rem;">
+                Identical two lines, reversed order, different final state. No chemistry equation
+                and no HTML line has ever behaved this way — order was always either irrelevant
+                (HTML attributes) or descriptive‑only (chemistry, “read the equation any direction”).
+                This is the first genuinely new mechanic in this whole three‑book project.
+            </p>
+        </div>
+
+        <h3>Data types — the periodic table, the closed memorizable set</h3>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr><th>Type</th><th>Description</th><th>Examples</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>int</code></td><td>Whole number</td><td><code>3</code>, <code>-12</code>, <code>0</code></td></tr>
+                    <tr><td><code>float</code></td><td>Decimal number</td><td><code>3.14</code>, <code>-0.5</code></td></tr>
+                    <tr><td><code>str</code></td><td>Text, quoted</td><td><code>"hello"</code>, <code>'world'</code></td></tr>
+                    <tr><td><code>bool</code></td><td>True / False</td><td><code>True</code>, <code>False</code></td></tr>
+                    <tr><td><code>NoneType</code></td><td>Nothing / absence</td><td><code>None</code></td></tr>
+                </tbody>
+            </table>
+        </div>
+        <p style="font-size:0.9rem; color:#b8a888; margin-top:-0.4rem;">
+            <span class="gold-icon">▸</span> Memorization table — nothing derives which literal syntax maps
+            to which type; you just have to know quotes mean <code>str</code>, a decimal point means <code>float</code>.
+        </p>
+
+        <div class="callout warning">
+            <span class="label">⚠ FALSE COGNATE (HTML §3)</span>
+            Python's <code>None</code> and HTML's empty/void elements (<code>&lt;br&gt;</code>, <code>&lt;hr&gt;</code>)
+            can both feel like “nothing here” — but <code>None</code> is an actual value that exists and can be
+            checked, passed around, and compared. A void element isn't “empty content,” it's a tag that
+            structurally never had a content slot to begin with. Absence‑as‑value vs absence‑of‑slot are
+            different ideas wearing similar clothes.
+        </div>
+
+        <div class="divider">✦ ✦ ✦</div>
+
+        <!-- ============================================================ -->
+        <!-- SECTION 2                                                     -->
+        <!-- ============================================================ -->
+        <h2><span class="section-number">§2.</span> Program Skeleton</h2>
+
+        <div class="callout important">
+            <span class="label">⚠ ORDER/STATE</span>
+            A module is a single <code>.py</code> file, top to bottom — <strong>always</strong>.
+        </div>
+
+        <div class="callout warning">
+            <span class="label">⚠ FALSE COGNATE (HTML §2) — CASHED IN HARD</span>
+            HTML's <code>&lt;head&gt;</code> and <code>&lt;body&gt;</code> “sound sequential but aren't” —
+            both exist the instant the page loads, simultaneously. A Python file's top‑to‑bottom order is
+            the <em>opposite</em> of that: it is <strong>genuinely sequential</strong>.
+            Line 3 can use something line 1 created; line 1 cannot use anything line 3 creates.
+            This is the exact temporal claim HTML's doc told you <em>not</em> to assume — and here it's finally true.
+        </div>
+
+        <h3>Import</h3>
+        <pre><code class="language-python">import module_name   # pulls in code defined elsewhere</code></pre>
+        <p style="font-size:0.95rem;">
+            <span class="gold-icon">▸</span> Real contrast worth naming: HTML's <code>&lt;link&gt;</code> /
+            <code>&lt;script src&gt;</code> were “the hole in the beaker” — HTML could <em>never</em> do that job
+            itself, only invite something else to. Python's <code>import</code> also reaches outside the current file,
+            but Python could, in principle, define that same code right here instead — importing is a
+            convenience/organization choice, not a structural admission of powerlessness.
+        </p>
+
+        <h3><code>if __name__ == "__main__"</code></h3>
+        <pre><code class="language-python">if __name__ == "__main__":
+    # only run if this file was launched directly, not imported</code></pre>
+        <div class="callout important">
+            <span class="label">⚠ ORDER/STATE — real exception</span>
+            This line only makes sense once you know Python sets a hidden variable, <code>__name__</code>,
+            differently depending on <em>how</em> the file was started. Nothing about the syntax announces this;
+            it's a convention resting on a mechanism you have to be told about once.
+        </div>
+
+        <div class="divider">✦ ✦ ✦</div>
+
+        <!-- ============================================================ -->
+        <!-- SECTION 3                                                     -->
+        <!-- ============================================================ -->
+        <h2><span class="section-number">§3.</span> Text &amp; Sequence Content</h2>
+
+        <h3>Strings, Lists, Tuples</h3>
+        <pre><code class="language-python">str   = ordered sequence of characters, indexable: "hi"[0] = "h"
+list  = ordered, mutable sequence: [1, 2, 3]
+tuple = ordered, immutable sequence: (1, 2, 3)</code></pre>
+
+        <div class="callout warning">
+            <span class="label">⚠ FALSE COGNATE (HTML §3)</span>
+            HTML's <code>&lt;ol&gt;</code> (“ordered list”) meant visual/semantic sequence only —
+            a numbered marker, nothing about execution. Python's list ordering is <em>real and load‑bearing</em>:
+            <code>list[0]</code> and <code>list[1]</code> are genuinely different memory positions you can act on
+            individually, not just numbered for display. The word “ordered” is finally doing the job its
+            English meaning always implied.
+        </div>
+
+        <h3>Dict</h3>
+        <pre><code class="language-python"># key/value pairs, insertion order preserved since 3.7
+{"name": "Amara", "age": 20}</code></pre>
+        <div class="callout warning">
+            <span class="label">⚠ FALSE COGNATE (HTML §11)</span>
+            A dict entry <em>looks</em> like an attribute pair (<code>key: value</code> vs <code>key="value"</code>)
+            but behaves like Section 11's <code>=</code> collision, not like an HTML attribute — the dict is a
+            live, mutable object sitting in memory; reassigning a key changes state, the same file, at the
+            moment that line runs. An HTML attribute never “changes” mid‑document; a dict routinely does,
+            line by line.
+        </div>
+
+        <h3>Set</h3>
+        <pre><code class="language-python"># unordered, no duplicates
+{1, 2, 3}</code></pre>
+        <p style="font-size:0.95rem;">
+            <span class="gold-icon">▸</span> Real exception to the ordering pattern just established —
+            sets exist precisely to throw ordering away. Don't over‑generalize “Python collections all care
+            about order” from list/dict; set is the honest counter‑case, kept for a specific reason
+            (fast membership checks, no duplicate tolerance).
+        </p>
+
+        <h3>f‑strings</h3>
+        <pre><code class="language-python">f"text {variable} more text"   # variable must already exist above this line</code></pre>
+        <div class="callout important">
+            <span class="label">⚠ ORDER/STATE</span>
+            The variable inside the <code>{}</code> must have been assigned <em>before</em> this line runs.
+        </div>
+
+        <div class="divider">✦ ✦ ✦</div>
+
+        <!-- ============================================================ -->
+        <!-- SECTION 4                                                     -->
+        <!-- ============================================================ -->
+        <h2><span class="section-number">§4.</span> Functions &amp; Reusable Blocks</h2>
+
+        <p style="font-size:0.95rem; color:#b8a888; margin-bottom:1.2rem;">
+            <span class="gold-icon">▸</span> HTML's Section 4 was about pulling outside media in as a static,
+            inert embed. Python's actual equivalent isn't importing files (that was Section 2) — it's the
+            function itself: a block you define once, and <em>embed a call to</em> anywhere you want its
+            effect to happen again.
+        </p>
+
+        <h3>Definition</h3>
+        <pre><code class="language-python">def function_name(parameter):
+    # indented block
+    return value</code></pre>
+
+        <div class="callout important">
+            <span class="label">⚠ ORDER/STATE — the most important fact</span>
+            A function's <strong>body doesn't run when it's defined</strong> — only when it's <strong>called</strong>.
+            <pre style="margin:0.6rem 0 0 0; background:transparent; padding:0 !important; box-shadow:none; border:none; border-radius:0; font-size:0.9rem;"><code class="language-python">def greet():
+    print("hi")      # nothing happens yet
+
+greet()              # THIS is when "hi" prints</code></pre>
+            <p style="margin-top:0.4rem; font-size:0.95rem;">
+                This has no HTML equivalent at all: HTML has nothing that is “written but dormant until
+                separately triggered.” A <code>&lt;p&gt;</code> tag renders the instant it's parsed.
+                A Python function can sit fully written, doing nothing, for the entire remaining life of
+                the program, until something calls it — possibly never.
+            </p>
+        </div>
+
+        <h3>Parameter Order</h3>
+        <pre><code class="language-python">def describe(name, age):
+    ...
+
+describe("Amara", 20)           # positional — name="Amara", age=20
+describe(age=20, name="Amara")  # keyword — identical result, order‑independent</code></pre>
+        <div class="callout warning">
+            <span class="label">⚠ FALSE COGNATE (HTML §11) — CASHED IN</span>
+            HTML told you attribute order never matters, full stop, always. Python's parameter order
+            matters <em>conditionally</em> — positional calls are order‑strict, keyword calls aren't.
+            This is exactly the “felt violation” the HTML book predicted: you already know
+            order‑doesn't‑matter as a gut feeling from attributes; Python punishes that gut feeling
+            the moment you drop a keyword.
+        </div>
+
+        <div class="divider">✦ ✦ ✦</div>
+
+        <!-- ============================================================ -->
+        <!-- SECTION 5                                                     -->
+        <!-- ============================================================ -->
+        <h2><span class="section-number">§5.</span> Python's Bonding Equivalent — Coupling</h2>
+
+        <p style="font-size:0.95rem; color:#b8a888; margin-bottom:1.2rem;">
+            HTML's only true bond was structural nesting; everything else was external and borrowed.
+            Python's bonding equivalent is about how tightly one piece of code depends on another's
+            internal state.
+        </p>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr><th>Category</th><th>Description</th><th>Analogy</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Pure Function</strong></td>
+                        <td>Uses only its own parameters; no outside variables touched</td>
+                        <td>~ Non‑polar Covalent</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Coupled Function</strong></td>
+                        <td>Reads a variable defined outside itself</td>
+                        <td>~ Polar Covalent</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Side‑Effect Function</strong></td>
+                        <td>Modifies a variable defined outside itself</td>
+                        <td>~ heading toward Ionic</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Global mutable state</strong></td>
+                        <td>Touched from many places</td>
+                        <td>~ Ionic Lattice</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="callout important">
+            <span class="label">⚠ ORDER/STATE</span>
+            A Coupled or Side‑Effect function's behavior can change depending on what ran before it —
+            a Pure Function's behavior <strong>cannot</strong>, ever, regardless of what ran before it.
+            <p style="margin-top:0.4rem; font-size:0.95rem;">
+                This is the real, checkable test for “how coupled is this”: if you can run a function
+                twice with the same arguments and ever get two different answers, something outside its
+                parameters is involved, and it now lives somewhere on the coupling scale above pure.
+            </p>
+        </div>
+
+        <div class="divider">✦ ✦ ✦</div>
+
+        <!-- ============================================================ -->
+        <!-- SECTION 6                                                     -->
+        <!-- ============================================================ -->
+        <h2><span class="section-number">§6.</span> Acid / Base / Salt Equivalent — Deployment Role</h2>
+
+        <p style="font-size:0.95rem; color:#b8a888; margin-bottom:1.2rem;">
+            Where HTML had one honest, permanent answer (always Base, never Acid), Python is where this
+            axis actually gets to do its full job, because Python is where real acids exist.
+        </p>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr><th>Role</th><th>Description</th><th>Example</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong style="color:#e06c75;">Acid</strong></td>
+                        <td>Script that runs, acts on other files/systems, then exits</td>
+                        <td>Build pipeline, data‑migration script, CSV→HTML generator</td>
+                    </tr>
+                    <tr>
+                        <td><strong style="color:#61afef;">Base</strong></td>
+                        <td>File/object that only holds data and waits to be acted on</td>
+                        <td>Config file, template, data class with no mutating methods</td>
+                    </tr>
+                    <tr>
+                        <td><strong style="color:#98c379;">Salt</strong></td>
+                        <td>Generated output, stable and done</td>
+                        <td>Rendered student page, compiled artifact</td>
+                    </tr>
+                    <tr>
+                        <td><strong style="color:#d4a84b;">Water</strong></td>
+                        <td>Side‑effects / logs / console output</td>
+                        <td>Printed status messages, debug output</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="callout">
+            <span class="label">Acid + Base = Salt + Water</span>
+            <pre style="margin:0.4rem 0 0 0; background:transparent; padding:0 !important; box-shadow:none; border:none; border-radius:0; font-size:0.9rem;"><code class="language-python">CSV + report_template.html (+ generator script)
+    = rendered student page (Salt) + console output (Water)</code></pre>
+            <p style="margin-top:0.4rem; font-size:0.95rem;">
+                This is close to a literal description of the report‑generation pipeline itself:
+                the CSV broadsheet and the HTML template are both inert Bases sitting still;
+                the Python generator script is the Acid that drives a reaction between them;
+                the individual student HTML pages that drop out afterward are the Salt —
+                stable, done, sitting on disk, no longer needing the script that made them to keep existing.
+            </p>
+        </div>
+
+        <h3>Strong vs Weak Acid</h3>
+        <pre><code class="language-python"># Strong Acid: runs deterministically to full completion, no conditional early exits
+# Weak Acid: partial — has branches, early returns, conditions where it doesn't fully "ionize"</code></pre>
+        <div class="callout important">
+            <span class="label">⚠ ORDER/STATE</span>
+            Whether a script counts as Strong or Weak on this axis can only be known by tracing its
+            actual execution path for given input — the same lines of code can behave Strong for one
+            input and Weak for another.
+            <p style="margin-top:0.4rem; font-size:0.95rem;">
+                A generator script might run “strong” (fully, deterministically) on 21 complete student
+                rows and “weak” (early‑exit/flagged) on the 2 incomplete ones (Dorcas, Habitat) in the
+                exact same run. Same acid, different strength, depending what it's reacting with.
+            </p>
+        </div>
+
+        <h3>Buffer Solution</h3>
+        <p style="font-size:0.95rem;">
+            A function/module with its own error handling and sane defaults, self‑stabilizing against
+            bad input, vs a fragile one‑off script that breaks the moment conditions shift even slightly.
+        </p>
+
+        <h3>Vertical axis — does the output stay dissolved, or separate out?</h3>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr><th>State</th><th>Description</th><th>Analogy</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>Salt</strong></td><td>In‑memory variable, gone when the process ends</td><td>Fully dissolved</td></tr>
+                    <tr><td><strong>Emulsion</strong></td><td>Cache / session‑scoped state, held together only while something maintains it</td><td>Emulsion</td></tr>
+                    <tr><td><strong>Precipitate</strong></td><td>Written file, persists after the process ends, same machine</td><td>Precipitate</td></tr>
+                    <tr><td><strong>Ester</strong></td><td>Portable/exported artifact (built package, Docker image, compiled binary)</td><td>Fully separated</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="callout important">
+            <span class="label">⚠ ORDER/STATE runs through this entire axis</span>
+            <em>When</em> you check “where is this output right now” changes the answer. A dict built
+            mid‑function is Salt while the function is running, and simply ceases to exist the moment
+            the function returns — chemistry's dissolved salt doesn't vanish when you stop looking at the
+            beaker; a Python variable's “solution” can disappear from under you the instant its enclosing
+            function ends. This is called <strong>scope</strong>, and it has no equivalent honesty‑requirement
+            in either prior book.
+        </div>
+
+        <div class="divider">✦ ✦ ✦</div>
+
+        <!-- ============================================================ -->
+        <!-- SECTION 7                                                     -->
+        <!-- ============================================================ -->
+        <h2><span class="section-number">§7.</span> Redox Equivalent — Fully Populated, Flexibly</h2>
+
+        <p style="font-size:0.95rem; color:#b8a888; margin-bottom:1.2rem;">
+            This was the section HTML left explicitly empty. Per the working framework, this one isn't
+            pinned to a single rigid mapping — it flexes per concept, same as chemistry's redox agents
+            being named for their effect on something <em>else</em>, not on themselves.
+        </p>
+
+        <div class="callout">
+            <span class="label">Reducing Agent</span>
+            Function/operation that <strong>causes</strong> another variable/object to change, while itself
+            changing in the act. The other variable is “reduced” — something was added/changed onto it.
+        </div>
+
+        <div class="callout">
+            <span class="label">Oxidized Party</span>
+            The thing that gets consumed/altered by something else acting on it.
+        </div>
+
+        <div class="callout warning">
+            <span class="label">⚠ Same backwards‑naming trap</span>
+            An agent is named for what it does to the <em>other</em> thing, not for its own visible behavior.
+            A function called <code>apply_discount(cart)</code> is the <strong>reducing agent</strong> —
+            it causes <code>cart</code> to change; <code>cart</code> is the oxidized party, the thing that
+            got acted upon.
+        </div>
+
+        <div class="callout important">
+            <span class="label">⚠ ORDER/STATE — load‑bearing here more than anywhere else</span>
+            <pre style="margin:0.4rem 0 0 0; background:transparent; padding:0 !important; box-shadow:none; border:none; border-radius:0; font-size:0.9rem;"><code class="language-python">mutating_function(shared_list)   # THEN read shared_list  => sees the mutation
+read shared_list                 # THEN mutating_function(shared_list)  => doesn't</code></pre>
+            <p style="margin-top:0.4rem; font-size:0.95rem;">
+                This is Python's honest equivalent of anode/cathode polarity depending on cell type:
+                whether a given piece of state has “already been reduced” depends entirely on where you're
+                standing in the execution order, not on anything you can read off the variable's definition alone.
+            </p>
+        </div>
+
+        <h3>Dependency chain / call order</h3>
+        <pre><code class="language-python"># A calls B calls C  => data/effects flow A -> B -> C, NOT C -> B -> A</code></pre>
+        <p style="font-size:0.95rem;">
+            Chains of function calls are Python's most literal redox structure: at each link, one function
+            is the agent causing change in what it calls or touches, and that changed thing becomes the
+            input further down the chain. Trace the chain in the wrong direction and the whole
+            “who reduced whom” story falls apart — same as misreading which electrode is the anode in a
+            galvanic vs electrolytic cell.
+        </p>
+
+        <div class="divider">✦ ✦ ✦</div>
+
+        <!-- ============================================================ -->
+        <!-- SECTION 8                                                     -->
+        <!-- ============================================================ -->
+        <h2><span class="section-number">§8.</span> Thermodynamics Equivalent — Execution Economics</h2>
+
+        <p style="font-size:0.95rem; color:#b8a888; margin-bottom:1.2rem;">
+            HTML had nothing here because it has no execution. Python has real execution, so per the
+            framework this maps to <strong>who pays, how much, and for how long</strong> a piece of code
+            keeps running — separate from kinetics (how fast), which stays its own lane below.
+        </p>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr><th>Economic Category</th><th>Description</th><th>Python Pattern</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong style="color:#98c379;">Spontaneous</strong></td>
+                        <td>Free, runs once given permission, no ongoing cost</td>
+                        <td>Pure computation / one‑shot script</td>
+                    </tr>
+                    <tr>
+                        <td><strong style="color:#d4a84b;">Combustion</strong></td>
+                        <td>Continuous input required, but self‑sustaining momentum once started</td>
+                        <td>Running server / event loop</td>
+                    </tr>
+                    <tr>
+                        <td><strong style="color:#e06c75;">Electrolysis</strong></td>
+                        <td>Massive forced input, zero self‑sufficiency, stops dead the instant force is withdrawn</td>
+                        <td>Timer/cron‑driven callback (scheduled job)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="callout important">
+            <span class="label">⚠ ORDER/STATE</span>
+            Which economic category a piece of code falls into can change based on where it's called from —
+            a function that's “spontaneous” called once in a script becomes part of a “combustion” system
+            the moment it's wrapped inside a running server's request handler.
+        </div>
+
+        <h3>Kinetics — kept deliberately separate</h3>
+        <pre><code class="language-python"># Time/space complexity (Big‑O) = HOW FAST, not who's paying or how long it runs
+# O(1), O(log n), O(n), O(n log n), O(n²) ...</code></pre>
+        <p style="font-size:0.95rem;">
+            A script can be Spontaneous (§8, free, runs once) <em>and</em> still be O(n²) (slow, this section) —
+            being “free to trigger” and “fast once triggered” are different questions, same as chemistry's
+            ΔG (does it happen) vs K (where does it end up) vs rate (how fast) all being related but
+            genuinely separate questions.
+        </p>
+
+        <h3>Catalyst‑equivalent</h3>
+        <pre><code class="language-python"># Caching / memoization: gets you to the answer faster, does NOT change WHAT the answer is</code></pre>
+        <p style="font-size:0.95rem;">
+            Same warning chemistry gave about catalysts and equilibrium: caching a function's result
+            changes speed on repeat calls, never changes correctness of the result itself. A cache with a
+            bug that changes the actual returned value isn't “a fast catalyst,” it's a broken function —
+            the same category error as thinking a catalyst could shift where a reaction settles.
+        </p>
+
+        <div class="divider">✦ ✦ ✦</div>
+
+        <!-- ============================================================ -->
+        <!-- SECTION 9                                                     -->
+        <!-- ============================================================ -->
+        <h2><span class="section-number">§9.</span> Forms Equivalent — where Python actually crosses the line</h2>
+
+        <p style="font-size:0.95rem; color:#b8a888; margin-bottom:1.2rem;">
+            HTML's form section was the closest that language got to acting, and the whole point of that
+            section was that it never actually crossed into acting — the browser did the real work, externally.
+        </p>
+
+        <h3><code>input()</code></h3>
+        <pre><code class="language-python">name = input("What's your name? ")   # execution PAUSES here until a human responds</code></pre>
+        <div class="callout important">
+            <span class="label">⚠ ORDER/STATE</span>
+            This is the real crossing HTML's <code>&lt;form&gt;</code> gestured at but never made.
+            <code>&lt;form&gt;</code> declared an intention; the browser (external) carried it out.
+            <code>input()</code> doesn't declare anything — it is the act itself, and it actually halts
+            the program's forward progress, mid‑execution, waiting. There is no HTML equivalent to a
+            line of code <strong>pausing</strong>; a parsed HTML document has no concept of paused‑and‑waiting at all.
+        </div>
+
+        <h3><code>open()</code> / write</h3>
+        <pre><code class="language-python">open("file.txt", "w").write("data")   # Python actually writing to disk, right now</code></pre>
+        <p style="font-size:0.95rem;">
+            Compare directly to HTML's <code>&lt;form action="..."&gt;</code>: HTML only ever declared
+            where data <em>should</em> go, never sent it. <code>open(...).write(...)</code> is Python
+            actually doing the sending — no external browser required, no admitted powerlessness.
+            This is Python holding the acid HTML could only gesture at pouring.
+        </p>
+
+        <div class="divider">✦ ✦ ✦</div>
+
+        <!-- ============================================================ -->
+        <!-- SECTION 10                                                    -->
+        <!-- ============================================================ -->
+        <h2><span class="section-number">§10.</span> Distinguishing Pairs</h2>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr><th>Pair</th><th>Meaning</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>=</code> vs <code>==</code></td>
+                        <td>Assignment (store a value) vs Comparison (ask “are these equal”, returns <code>True</code>/<code>False</code>)</td>
+                    </tr>
+                    <tr>
+                        <td><code>list</code> vs <code>tuple</code></td>
+                        <td>Mutable, changeable after creation vs Immutable, fixed forever once made</td>
+                    </tr>
+                    <tr>
+                        <td><code>is</code> vs <code>==</code></td>
+                        <td>Same object in memory vs Same value</td>
+                    </tr>
+                    <tr>
+                        <td><code>return</code> vs <code>print</code></td>
+                        <td>Hands a value back to the caller vs Displays text, gives nothing back</td>
+                    </tr>
+                    <tr>
+                        <td><code>Argument</code> vs <code>Parameter</code></td>
+                        <td>Parameter is the name in the <code>def</code>; argument is the actual value passed at call time</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="callout warning">
+            <span class="label">⚠ FALSE COGNATE (HTML §11) — the single most common bug</span>
+            <code>if x = 5:</code> is not “checking if x is 5,” it's an attempt to assign inside a condition,
+            and Python actually forbids this exact mistake with a syntax error — one of the few places the
+            language protects you from the very collision this whole book was built around.
+        </div>
+
+        <div class="callout important">
+            <span class="label">Real trap</span>
+            Two different lists holding identical numbers are <code>==</code> <code>True</code> but
+            <code>is</code> <code>False</code> — same value, different object. No HTML pair works this way;
+            HTML has no concept of object identity separate from content at all.
+        </div>
+
+        <div class="callout">
+            <span class="label">Beginner conflation</span>
+            A function that <code>print</code>s its answer but doesn't <code>return</code> it looks like it
+            “worked” (you saw the output) but any code trying to <em>use</em> that function's result gets
+            <code>None</code> — the value was shown, never handed back.
+        </div>
+
+        <div class="divider">✦ ✦ ✦</div>
+
+        <!-- ============================================================ -->
+        <!-- SECTION 11                                                    -->
+        <!-- ============================================================ -->
+        <h2><span class="section-number">§11.</span> Variables &amp; Scope — Python's Mole &amp; Stoichiometry</h2>
+
+        <p style="font-size:0.95rem; color:#b8a888; margin-bottom:1.2rem;">
+            HTML's bridge currency was the attribute=value pair — the mechanism every tag relied on.
+            Python's bridge currency is <strong>scope</strong>: the rule governing which name refers to
+            which value, at which point in execution — the concept every other section above has quietly leaned on.
+        </p>
+
+        <div class="callout important">
+            <span class="label">⚠ ORDER/STATE</span>
+            <strong>Local scope</strong>: variable defined inside a function — exists only during that call,
+            gone after return.
+            <br />
+            <strong>Global scope</strong>: variable defined outside any function — exists for the whole
+            module's lifetime.
+        </div>
+
+        <h3>Shadowing</h3>
+        <pre><code class="language-python">x = 5                 # global
+
+def f():
+    x = 10            # this x is DIFFERENT — local, doesn't touch the global
+    return x
+
+f()      # => 10
+print(x) # => still 5</code></pre>
+
+        <div class="callout important">
+            <span class="label">⚠ ORDER/STATE — the single most disorienting fact</span>
+            The <em>same name</em>, <code>x</code>, can refer to two completely different values depending
+            purely on <strong>where</strong> in the file's structure a line sits — not because anything
+            overwrote anything, but because scope partitions the name itself. HTML has nothing like this:
+            an <code>id</code> either exists on the page or doesn't; it doesn't quietly mean something
+            different depending which <code>&lt;div&gt;</code> you're standing inside.
+        </div>
+
+        <h3>Function Signature — the “stoichiometry” of a program</h3>
+        <pre><code class="language-python">def convert(celsius):
+    return celsius * 9/5 + 32
+# 1 argument in -> 1 value out, exactly, every call, same ratio</code></pre>
+        <p style="font-size:0.95rem;">
+            Just as chemistry's mole section revealed that every “A + B = C” from earlier sections secretly
+            encoded a ratio, this reveals that every function signature used throughout this book secretly
+            encoded an input‑to‑output contract the whole time — parameters and return values are the real
+            “stoichiometry” of a Python program.
+        </p>
+
+        <div class="callout warning">
+            <span class="label">⚠ FALSE COGNATE (HTML §11) — cashed in a second time</span>
+            A function call, <code>describe("Amara", 20)</code>, <em>looks</em> like it's just “filling in
+            slots” the way attributes filled in a tag's configuration. But each call is a fresh,
+            <span class="order-icon">⚠ ORDER/STATE</span> event — a new local scope is created, used, and
+            destroyed, every single time the function runs. An HTML tag's attributes don't get “recreated”
+            on some kind of repeated firing; they just sit, once, forever, in the file.
+        </div>
+
+        <div class="divider">✦ ✦ ✦</div>
+
+        <!-- ============================================================ -->
+        <!-- SECTION 12 — SUMMARY                                         -->
+        <!-- ============================================================ -->
+        <h2><span class="section-number">§12.</span> Summary for a New Reader</h2>
+
+        <div class="callout" style="border-left-color: #d4a84b; background: rgba(212,168,75,0.04); padding: 1.6rem 2rem;">
+            <p style="font-size:1.05rem; line-height:1.8;">
+                Python is the half of this book‑pair where the sections HTML left honestly blank —
+                redox, thermodynamics — finally get their real content, because Python is where code
+                stops describing structure and starts issuing commands against a state that changes
+                as those commands run.
+            </p>
+            <p style="font-size:1.05rem; line-height:1.8; margin-top:0.8rem;">
+                The single flag that had almost no work to do in the HTML book,
+                <span class="order-icon">⚠ ORDER/STATE</span>, is the dominant fact of nearly every
+                section here: the <em>same characters</em>, evaluated in a different sequence, produce
+                a different program.
+            </p>
+            <p style="font-size:1.05rem; line-height:1.8; margin-top:0.8rem;">
+                The collision seeded hardest across both books — HTML's <code>=</code> meaning
+                “this attribute permanently has this value” versus Python's <code>=</code> meaning
+                “compute the right side now, store it under this name, at this exact moment” —
+                is the one piece of evidence that best honors the distinction raised at the very start
+                of this project: chemistry's vocabulary was built to describe phenomena that would happen
+                with or without the words for them; HTML's vocabulary describes a structure that sits still
+                the instant it's written; Python's vocabulary is the first of the three that actually
+                <em>does</em> something the moment you run it, in the order you wrote it, whether you
+                meant it to or not.
+            </p>
+        </div>
+
+        <div class="divider" style="margin-top:3rem;">✦ ✦ ✦</div>
+        <p style="text-align:center; font-size:0.9rem; color:#b8a888; letter-spacing:0.1em; margin-top:0.5rem;">
+            <span style="color:#d4a84b; opacity:0.3;">❧</span>
+            &nbsp; finis &nbsp;
+            <span style="color:#d4a84b; opacity:0.3;">❧</span>
+        </p>
+
+    </div>
+    <!-- /.book -->
+
+</body>
+</html>
