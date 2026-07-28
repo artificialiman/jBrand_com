@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BCM Homes — Feed Sample</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root {
+    --clay: #8A5A3B;
+    --clay-deep: #5E3B26;
+    --brass: #B8873D;
+    --brass-bright: #D9A94E;
+    --palm: #2F4A3C;
+    --palm-deep: #1C2E25;
+    --river: #7C948C;
+    --carnival: #C43B2F;
+    --linen: #F1E9DC;
+    --ink: #241C15;
+
+    --shadow: 0 1px 2px rgba(36,28,21,0.06), 0 4px 12px rgba(36,28,21,0.08);
+    --radius-card: 12px;
+    --radius-control: 8px;
+    --radius-pill: 999px;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--linen);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: 32px 16px;
+  }
+
+  .phone {
+    width: 390px;
+    max-width: 100%;
+  }
+
+  /* ---------- Notification bar ---------- */
+  .notif-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 20px;
+  }
+
+  .notif {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: var(--radius-pill);
+    font-size: 12px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  .notif .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* Listing alert — full weight, per notification hierarchy */
+  .notif.listing {
+    background: rgba(184, 135, 61, 0.14);
+    color: var(--clay-deep);
+    font-weight: 500;
+    order: 1;
+  }
+  .notif.listing .dot { background: var(--brass); }
+
+  /* Condition report — quiet, per notification hierarchy */
+  .notif.condition {
+    background: rgba(124, 148, 140, 0.10);
+    color: var(--river);
+    font-size: 11px;
+    padding: 6px 12px;
+    order: 2;
+  }
+  .notif.condition .dot { background: var(--river); }
+
+  /* ---------- Feed heading ---------- */
+  .feed-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--river);
+    margin: 0 0 8px 2px;
+  }
+
+  /* ---------- Listing card ---------- */
+  .card {
+    position: relative;
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    background: var(--clay-deep);
+    box-shadow: var(--shadow);
+    margin-bottom: 20px;
+  }
+
+  .card-photo {
+    position: relative;
+    height: 240px;
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+  }
+
+  .card-photo::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(36,28,21,0) 40%, rgba(36,28,21,0.55) 100%);
+  }
+
+  /* shimmer sweep layer — sits above the photo, below the gradient scrim */
+  .shimmer {
+    position: absolute;
+    inset: 0;
+    background-size: 200% 100%;
+    background-repeat: no-repeat;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  @keyframes sweep {
+    from { background-position: 200% 0; }
+    to   { background-position: -200% 0; }
+  }
+
+  .shimmer.verified {
+    background-image: linear-gradient(100deg, transparent 25%, rgba(184,135,61,0.38) 50%, transparent 75%);
+    animation: sweep 1.8s ease-in-out 2;
+  }
+
+  .shimmer.hotspot {
+    background-image: linear-gradient(100deg, transparent 20%, rgba(217,169,78,0.55) 50%, transparent 80%);
+    animation: sweep 2.6s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+    box-shadow: inset 0 0 40px rgba(217,169,78,0.12);
+  }
+
+  .shimmer.isochron {
+    background-image: linear-gradient(100deg, transparent 30%, rgba(47,74,60,0.32) 50%, transparent 70%);
+    animation: sweep 1.8s ease-in-out 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .shimmer { animation: none !important; background-image: none !important; }
+    .shimmer.verified { box-shadow: inset 0 0 0 2px rgba(184,135,61,0.5); }
+    .shimmer.hotspot { box-shadow: inset 0 0 0 2px rgba(217,169,78,0.7); }
+    .shimmer.isochron { box-shadow: inset 0 0 0 2px rgba(47,74,60,0.5); }
+  }
+
+  .tier-mark {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(36,28,21,0.35);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .tier-mark svg { width: 14px; height: 14px; }
+
+  .card-body {
+    padding: 16px 18px 18px;
+    background: var(--linen);
+  }
+
+  .card-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 6px;
+  }
+
+  .price {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--clay-deep);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .mode-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.05em;
+    padding: 3px 9px;
+    border-radius: var(--radius-pill);
+    border: 1px solid currentColor;
+  }
+  .mode-tag.annual { color: var(--clay-deep); }
+  .mode-tag.short-let { color: var(--palm); }
+  .mode-tag.studio { color: var(--river); }
+  .mode-tag.event { color: var(--brass); }
+
+  .location {
+    font-size: 14px;
+    color: var(--ink);
+    margin: 0 0 2px;
+  }
+
+  .isochron-note {
+    font-size: 11px;
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--palm);
+    margin: 0;
+  }
+
+  /* ---------- Amenity card (its own distinct beat) ---------- */
+  .amenity-card {
+    border-radius: var(--radius-card);
+    background: var(--palm-deep);
+    color: var(--linen);
+    padding: 22px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .amenity-card::before {
+    content: "";
+    position: absolute;
+    top: -40%;
+    right: -20%;
+    width: 220px;
+    height: 220px;
+    background: radial-gradient(circle, rgba(217,169,78,0.18) 0%, transparent 70%);
+  }
+
+  .amenity-hook {
+    font-family: 'Fraunces', serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 1.15;
+    margin: 0 0 16px;
+    max-width: 240px;
+    position: relative;
+  }
+
+  .amenity-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+  }
+
+  .amenity-price {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    color: var(--river);
+  }
+
+  .amenity-cta {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--palm-deep);
+    background: var(--brass-bright);
+    border: none;
+    padding: 10px 18px;
+    border-radius: var(--radius-control);
+    cursor: pointer;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .amenity-cta:active {
+    transform: scale(0.97);
+    box-shadow: 0 0 0 6px rgba(217,169,78,0.18);
+  }
+
+  .amenity-cta:focus-visible {
+    outline: 2px solid var(--brass-bright);
+    outline-offset: 2px;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px; height: 1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    white-space: nowrap;
+  }
+
+  .caption {
+    font-size: 11px;
+    color: var(--river);
+    text-align: center;
+    margin-top: 24px;
+    line-height: 1.5;
+  }
+</style>
+</head>
+<body>
+
+<div class="phone">
+
+  <div class="notif-stack">
+    <div class="notif listing"><span class="dot"></span> Hotspot near you — Ekpo Abasi</div>
+    <div class="notif condition"><span class="dot"></span> Power: 4hrs today, State Housing</div>
+  </div>
+
+  <p class="feed-label">Near where you said mattered</p>
+
+  <!-- HOTSPOT tier + isochron overlay together -->
+  <article class="card">
+    <div class="card-photo" style="background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80');">
+      <div class="shimmer hotspot" role="img" aria-label="Hotspot: vetted by trusted fellows"></div>
+      <div class="shimmer isochron" aria-hidden="true"></div>
+      <div class="tier-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#D9A94E" stroke-width="2">
+          <circle cx="12" cy="12" r="9"/>
+          <circle cx="12" cy="12" r="5"/>
+        </svg>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-top-row">
+        <span class="price">₦850,000 / yr</span>
+        <span class="mode-tag annual">ANNUAL</span>
+      </div>
+      <p class="location">3-bed duplex, State Housing Estate</p>
+      <p class="isochron-note">18 min drive · within your zone</p>
+    </div>
+  </article>
+
+  <!-- VERIFIED tier only -->
+  <article class="card">
+    <div class="card-photo" style="background-image: url('https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?w=800&q=80');">
+      <div class="shimmer verified" role="img" aria-label="BCM verified listing"></div>
+      <div class="tier-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#B8873D" stroke-width="2">
+          <path d="M4 12l5 5L20 6"/>
+        </svg>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-top-row">
+        <span class="price">₦45,000 / night</span>
+        <span class="mode-tag short-let">SHORT-LET</span>
+      </div>
+      <p class="location">Studio flat, Marina waterfront</p>
+    </div>
+  </article>
+
+  <!-- AMENITY CARD — its own distinct beat -->
+  <div class="amenity-card">
+    <p class="amenity-hook">No light where you're moving?</p>
+    <div class="amenity-row">
+      <span class="amenity-price">Solar unit · ₦6,500/wk</span>
+      <button class="amenity-cta">Rent it delivered</button>
+    </div>
+  </div>
+
+  <!-- PLAIN tier (no shimmer) -->
+  <article class="card">
+    <div class="card-photo" style="background-image: url('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=80');">
+    </div>
+    <div class="card-body">
+      <div class="card-top-row">
+        <span class="price">₦180,000 / yr</span>
+        <span class="mode-tag studio">STUDIO</span>
+      </div>
+      <p class="location">Self-contain, Anantigha</p>
+    </div>
+  </article>
+
+  <p class="caption">
+    Shimmer tiers, top to bottom: hotspot + isochron overlay together,<br>
+    verified only, amenity beat, then an unverified listing with no shimmer.<br>
+    Reduced-motion users see a static tinted ring instead of the sweep.
+  </p>
+
+</div>
+
+</body>
+</html>
