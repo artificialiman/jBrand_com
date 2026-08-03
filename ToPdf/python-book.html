@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Python, Reduced to Sums &amp; Differences</title>
+<style>
+
+@font-face {
+  font-family: 'Source Serif Pro';
+  src: url('assets/fonts/SourceSerif-Regular.woff2') format('woff2');
+  font-weight: 400; font-style: normal;
+}
+@font-face {
+  font-family: 'Source Serif Pro';
+  src: url('assets/fonts/SourceSerif-Italic.woff2') format('woff2');
+  font-weight: 400; font-style: italic;
+}
+@font-face {
+  font-family: 'Source Serif Pro';
+  src: url('assets/fonts/SourceSerif-SemiBold.woff2') format('woff2');
+  font-weight: 600; font-style: normal;
+}
+@font-face {
+  font-family: 'Source Serif Pro';
+  src: url('assets/fonts/SourceSerif-SemiBoldItalic.woff2') format('woff2');
+  font-weight: 600; font-style: italic;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('assets/fonts/JetBrainsMono-Regular.ttf') format('truetype');
+  font-weight: 400; font-style: normal;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('assets/fonts/JetBrainsMono-Bold.ttf') format('truetype');
+  font-weight: 700; font-style: normal;
+}
+
+@page {
+  size: A4;
+  margin: 26mm 20mm 24mm 20mm;
+  @bottom-center {
+    content: counter(page);
+    font-family: 'Source Serif Pro', Georgia, serif;
+    font-size: 9pt;
+    color: #8a8578;
+  }
+}
+
+@page :first {
+  margin: 0;
+  @bottom-center { content: none; }
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #F7F5F0;
+  color: #1A1A1A;
+  font-family: 'Source Serif Pro', 'Noto Serif', Georgia, serif;
+  font-size: 10.6pt;
+  line-height: 1.55;
+}
+
+/* ---------- COVER PAGE ---------- */
+.cover {
+  page: cover;
+  break-after: page;
+  height: 297mm;
+  width: 210mm;
+  background: #1A1A1A;
+  color: #F7F5F0;
+  position: relative;
+  overflow: hidden;
+}
+.cover::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 38px, rgba(247,245,240,0.035) 39px),
+    repeating-linear-gradient(90deg, transparent, transparent 38px, rgba(247,245,240,0.035) 39px);
+}
+.cover-inner {
+  position: relative;
+  height: 100%;
+  padding: 36mm 24mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.cover-eyebrow {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 10pt;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #B8763E;
+}
+.cover-title {
+  font-family: 'Source Serif Pro', Georgia, serif;
+  font-weight: 600;
+  font-size: 46pt;
+  line-height: 1.08;
+  margin: 18mm 0 6mm 0;
+  max-width: 140mm;
+}
+.cover-title em {
+  font-style: italic;
+  color: #B8763E;
+}
+.cover-sub {
+  font-size: 13pt;
+  color: #cfc9ba;
+  max-width: 120mm;
+  line-height: 1.5;
+}
+.cover-axis {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5pt;
+  color: #8fa6ad;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10mm;
+}
+.cover-axis .tick-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, #4A6670, #B8763E);
+  position: relative;
+}
+.cover-footer {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8.5pt;
+  color: #8a8578;
+  letter-spacing: 0.05em;
+  border-top: 1px solid #33322c;
+  padding-top: 5mm;
+}
+
+/* ---------- BODY TYPE ---------- */
+
+h1.doctitle {
+  display: none;
+}
+
+.eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8.5pt;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #B8763E;
+  margin-bottom: 2mm;
+}
+
+h2 {
+  font-family: 'Source Serif Pro', Georgia, serif;
+  font-weight: 600;
+  font-size: 19pt;
+  letter-spacing: -0.01em;
+  color: #1A1A1A;
+  margin: 0 0 4mm 0;
+  padding-bottom: 3mm;
+  border-bottom: 1.5px solid #1A1A1A;
+  break-before: page;
+}
+
+h2.no-break { break-before: auto; }
+
+h3 {
+  font-family: 'Source Serif Pro', Georgia, serif;
+  font-weight: 600;
+  font-style: italic;
+  font-size: 12.5pt;
+  color: #4A6670;
+  margin: 7mm 0 2mm 0;
+}
+
+p { margin: 0 0 3mm 0; }
+
+section.chapter {
+  margin-bottom: 6mm;
+}
+
+/* code / equation blocks */
+.eq {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 9.3pt;
+  background: #EFEBE1;
+  border-left: 3px solid #1A1A1A;
+  padding: 3mm 4mm;
+  margin: 3mm 0 3mm 0;
+  white-space: pre-wrap;
+  line-height: 1.65;
+  color: #2b2a25;
+  border-radius: 0 3px 3px 0;
+}
+
+/* annotation blockquote - amber, memorization/exception/mechanism */
+.note {
+  border-left: 3px solid #B8763E;
+  background: rgba(184, 118, 62, 0.07);
+  padding: 2.5mm 4mm;
+  margin: 0 0 4mm 0;
+  font-size: 9.6pt;
+  color: #4a3826;
+  border-radius: 0 3px 3px 0;
+}
+.note::before {
+  content: "▸ ";
+  color: #B8763E;
+  font-weight: 700;
+}
+
+/* the ORDER/STATE flag - slate blue, the book's central thesis */
+.state {
+  border-left: 3px solid #4A6670;
+  background: rgba(74, 102, 112, 0.07);
+  padding: 2.5mm 4mm;
+  margin: 0 0 4mm 0;
+  font-size: 9.6pt;
+  color: #2b3d42;
+  border-radius: 0 3px 3px 0;
+}
+.state::before {
+  content: "⚠ ORDER/STATE — ";
+  color: #4A6670;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8.5pt;
+  letter-spacing: 0.03em;
+}
+
+/* false cognate flag - a distinct, slightly alarmed treatment */
+.cognate {
+  border-left: 3px solid #8a3b3b;
+  background: rgba(138, 59, 59, 0.06);
+  padding: 2.5mm 4mm;
+  margin: 0 0 4mm 0;
+  font-size: 9.6pt;
+  color: #4a1f1f;
+  border-radius: 0 3px 3px 0;
+}
+.cognate::before {
+  content: "⚠ FALSE COGNATE — ";
+  color: #8a3b3b;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8.5pt;
+  letter-spacing: 0.03em;
+}
+
+.tag { font-family: 'JetBrains Mono', monospace; font-size: 92%; background: #EFEBE1; padding: 0.5px 4px; border-radius: 2px; }
+
+/* legend box on first content page */
+.legend {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4mm 6mm;
+  margin: 5mm 0 6mm 0;
+}
+.legend-item {
+  font-size: 8.6pt;
+  line-height: 1.45;
+  padding: 3mm 3.5mm;
+  border-radius: 3px;
+}
+.legend-item .lab {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: 8pt;
+  display: block;
+  margin-bottom: 1mm;
+}
+
+.intro-block {
+  font-size: 10.8pt;
+  color: #33322c;
+  margin-bottom: 4mm;
+}
+
+/* running section number badge */
+.secnum {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9pt;
+  color: #F7F5F0;
+  background: #1A1A1A;
+  width: 7mm;
+  height: 7mm;
+  line-height: 7mm;
+  text-align: center;
+  border-radius: 2px;
+  margin-right: 3mm;
+  vertical-align: middle;
+}
+
+/* --- final section: Claude's workflow axis diagrams --- */
+.axis-block {
+  margin: 5mm 0 7mm 0;
+}
+.axis-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9pt;
+  font-weight: 700;
+  color: #1A1A1A;
+  margin-bottom: 1.5mm;
+}
+.axis-track {
+  position: relative;
+  height: 7mm;
+  background: linear-gradient(90deg, #4A6670 0%, #cfc9ba 50%, #B8763E 100%);
+  border-radius: 4px;
+  margin-bottom: 1.5mm;
+}
+.axis-marker {
+  position: absolute;
+  top: -2.2mm;
+  width: 4mm;
+  height: 11.4mm;
+  background: #1A1A1A;
+  border-radius: 2px;
+  box-shadow: 0 0 0 2px #F7F5F0;
+}
+.axis-caption {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 7.8pt;
+  color: #6b6656;
+}
+.axis-note {
+  font-size: 9.3pt;
+  color: #33322c;
+  margin-top: 1.5mm;
+}
+
+.closing {
+  font-size: 10.8pt;
+  font-style: italic;
+  color: #33322c;
+  border-top: 1px solid #d8d2c2;
+  margin-top: 8mm;
+  padding-top: 5mm;
+}
+
+strong { color: #1A1A1A; }
+
+</style>
+</head>
+<body>
+
+<!-- ============ COVER ============ -->
+<div class="cover">
+  <div class="cover-inner">
+    <div>
+      <div class="cover-eyebrow">A Compressed Equational Reference · Book Two of Two</div>
+      <div class="cover-title">Python,<br>Reduced to<br><em>Sums &amp; Differences</em></div>
+      <div class="cover-sub">Where the chemistry equation book described phenomena, and the HTML companion described inert structure, this book is the first of the three to actually run: commands, issued in order, against a state that changes between lines.</div>
+      <div class="cover-axis">
+        <span>SPONTANEOUS</span>
+        <span class="tick-line"></span>
+        <span>FORCED</span>
+      </div>
+    </div>
+    <div class="cover-footer">
+      <span>UDEM · STUDI054 SYSTEMS</span>
+      <span>COMPANION TO: HTML, REDUCED TO SUMS &amp; DIFFERENCES</span>
+    </div>
+  </div>
+</div>
+
+<!-- ============ INTRO / LEGEND ============ -->
+<section class="chapter">
+<div class="eyebrow">Preface</div>
+<h2 class="no-break">How to Read This Book</h2>
+
+<div class="intro-block">
+Same compressed-equation style as the chemistry and HTML books — but Python's currency is different in kind, not just degree. Chemistry describes phenomena; HTML describes static structure; Python <strong>issues commands, in a specific order, against a state that persists and changes between lines.</strong> That is not a bigger chemistry — it is the thing chemistry never had to model at all.
+</div>
+<div class="intro-block">
+The chemistry book carried one honesty flag throughout (memorization table, real exception, mechanism note). HTML added one more (a false cognate — a symbol reused across languages for an unrelated job). Python needs a third, and it is not a footnote here — it is close to the dominant fact of the whole language.
+</div>
+
+<div class="legend">
+  <div class="legend-item note"><span class="lab">▸ NOTE</span>Memorization table, real exception, or mechanism note — same convention carried over from the chemistry book.</div>
+  <div class="legend-item cognate"><span class="lab">⚠ FALSE COGNATE</span>A symbol or word seeded in the HTML book, now cashed in — same spelling, unrelated job.</div>
+  <div class="legend-item state" style="grid-column: span 2;"><span class="lab">⚠ ORDER/STATE</span>This line's meaning depends on <em>when</em> it runs and <em>what ran before it</em>. In chemistry this was one section's territory. In Python it is close to the default condition of a working line of code — flagged everywhere it applies, which is nearly everywhere.</div>
+</div>
+</section>
+
+<!-- ============ SECTION 1 ============ -->
+<section class="chapter">
+<div class="eyebrow">Section 1</div>
+<h2><span class="secnum">1</span>Core Build</h2>
+
+<div class="eq">Keyword + Expression + Colon + Indented Block = Statement
+if condition: / do something = Statement</div>
+
+<div class="cognate">HTML tags look like commands (<span class="tag">&lt;br&gt;</span> reads like "break here") but never execute. Python keywords (<span class="tag">if</span>, <span class="tag">for</span>, <span class="tag">def</span>, <span class="tag">return</span>) are the real thing HTML's tag-verbs only impersonated — these genuinely cause something to happen, in a specific place in the running program, at a specific time. <em>(HTML §1)</em></div>
+
+<h3>Variables — the line HTML's attribute section warned about</h3>
+<div class="eq">Name + "=" + Value = Assignment
+x = 5</div>
+
+<div class="cognate"><strong>Cashed in.</strong> HTML's <span class="tag">=</span> meant "this attribute permanently has this value," decided once, no computation, no memory. Python's <span class="tag">=</span> means: evaluate the right side <em>right now</em>, store the result under the name on the left, at this exact point in execution. Same glyph, unrelated job. This is the single collision the whole two-book project was built to make you feel, not just know. <em>(HTML §11)</em></div>
+
+<div class="state">x = 5 THEN x = x + 1 ⇒ x is 6
+x = x + 1 THEN x = 5 ⇒ x is 5 — identical two lines, reversed order, different final state.</div>
+
+<div class="note">No chemistry equation and no HTML line has ever behaved this way — order was always either irrelevant (HTML attributes) or descriptive-only (chemistry reads any direction). This is the first genuinely new mechanic in this whole three-book project.</div>
+
+<h3>Data types — the periodic table equivalent</h3>
+<div class="eq">Whole number = int          3, -12, 0
+Decimal number = float      3.14, -0.5
+Text, quoted = str          "hello", 'world'
+True/False = bool           True, False
+Nothing/absence = NoneType  None</div>
+
+<div class="note">Memorization table — nothing derives which literal syntax maps to which type; you just have to know quotes mean str, a decimal point means float.</div>
+
+<div class="cognate">Python's <span class="tag">None</span> and HTML's void elements can both feel like "nothing here" — but <span class="tag">None</span> is an actual value that exists and can be checked, passed, compared. A void element isn't "empty content," it's a tag that structurally never had a content slot to begin with. Absence-as-value vs. absence-of-slot are different ideas wearing similar clothes. <em>(HTML §3)</em></div>
+</section>
+
+<!-- ============ SECTION 2 ============ -->
+<section class="chapter">
+<div class="eyebrow">Section 2</div>
+<h2><span class="secnum">2</span>Program Skeleton</h2>
+
+<div class="eq">Module = a single .py file, top to bottom</div>
+
+<div class="state">A Python file's top-to-bottom order is GENUINELY sequential. Line 3 can use something line 1 created; line 1 cannot use anything line 3 creates.</div>
+
+<div class="cognate"><strong>Cashed in hard.</strong> HTML's <span class="tag">&lt;head&gt;</span>/<span class="tag">&lt;body&gt;</span> "sound sequential but aren't" — both exist the instant the page loads, simultaneously. This is the exact temporal claim HTML told you not to assume — and here it's finally true. <em>(HTML §2)</em></div>
+
+<div class="eq">import module_name = pulls in code defined elsewhere</div>
+
+<div class="note">Real contrast worth naming: HTML's <span class="tag">&lt;link&gt;</span>/<span class="tag">&lt;script src&gt;</span> were "the hole in the beaker" — HTML could <em>never</em> do that job itself. Python's <span class="tag">import</span> also reaches outside the file, but Python could, in principle, define that same code right here instead — importing is a convenience, not a structural admission of powerlessness.</div>
+
+<div class="eq">if __name__ == "__main__": = "only run this if the file was launched directly, not imported"</div>
+
+<div class="state">This line only makes sense once you know Python sets a hidden variable, <span class="tag">__name__</span>, differently depending on <em>how</em> the file was started. Nothing about the syntax announces this; it rests on a mechanism you have to be told about once.</div>
+</section>
+
+<!-- ============ SECTION 3 ============ -->
+<section class="chapter">
+<div class="eyebrow">Section 3</div>
+<h2><span class="secnum">3</span>Text &amp; Sequence Content</h2>
+
+<div class="eq">str  = ordered sequence of characters: "hi"[0] = "h"
+list = ordered, mutable sequence: [1, 2, 3]
+tuple = ordered, immutable sequence: (1, 2, 3)</div>
+
+<div class="cognate">HTML's <span class="tag">&lt;ol&gt;</span> ("ordered list") meant visual/semantic sequence only — a numbered marker, nothing about execution. Python's list ordering is real and load-bearing: <span class="tag">list[0]</span> and <span class="tag">list[1]</span> are genuinely different memory positions, not just numbered for display. <em>(HTML §3)</em></div>
+
+<div class="eq">dict = key/value pairs, insertion order preserved (3.7+), NOT sorted
+{"name": "Amara", "age": 20}</div>
+
+<div class="cognate">A dict entry LOOKS like an attribute pair (<span class="tag">key: value</span> vs <span class="tag">key="value"</span>) but behaves like the <span class="tag">=</span> collision, not like an HTML attribute — the dict is a live, mutable object; reassigning a key changes state, the same file, the moment that line runs. An HTML attribute never "changes" mid-document. <em>(HTML §11)</em></div>
+
+<div class="eq">set = unordered, no duplicates: {1, 2, 3}</div>
+<div class="note">A real exception to the pattern just established — sets exist precisely to throw ordering away. Don't over-generalize "Python collections all care about order" from list/dict.</div>
+
+<div class="state">f"text {variable} more text" — the variable referenced must already exist above this line.</div>
+</section>
+
+<!-- ============ SECTION 4 ============ -->
+<section class="chapter">
+<div class="eyebrow">Section 4</div>
+<h2><span class="secnum">4</span>Functions &amp; Reusable Blocks</h2>
+
+<p>HTML's media section was about pulling outside content in as a static, inert embed. Python's real equivalent isn't importing files — it's the function itself: a block defined once, whose <em>effect</em> you embed a call to, anywhere, repeatedly.</p>
+
+<div class="eq">def function_name(parameter): + indented block + return value = Function Definition</div>
+
+<div class="state">A function's BODY doesn't run when it's defined — only when it's CALLED.
+def greet(): print("hi")     ← nothing happens yet
+greet()                      ← THIS is when "hi" prints</div>
+
+<div class="note">Arguably the single most important ORDER/STATE fact in the language, with no HTML equivalent at all: HTML has nothing "written but dormant until separately triggered." A <span class="tag">&lt;p&gt;</span> renders the instant it's parsed. A function can sit fully written, doing nothing, for the program's entire life, until something calls it — possibly never.</div>
+
+<div class="eq">Parameter order matters UNLESS called with keyword arguments
+describe("Amara", 20)          = positional, order-dependent
+describe(age=20, name="Amara") = keyword, order-independent, identical result</div>
+
+<div class="cognate"><strong>Cashed in.</strong> HTML told you attribute order never matters, full stop, always. Python's parameter order matters <em>conditionally</em>. This is exactly the felt violation the HTML book predicted. <em>(HTML §11)</em></div>
+</section>
+
+<!-- ============ SECTION 5 ============ -->
+<section class="chapter">
+<div class="eyebrow">Section 5</div>
+<h2><span class="secnum">5</span>Bonding Equivalent — Coupling, not Nesting</h2>
+
+<p>HTML's only true bond was structural nesting; everything else was external and borrowed. Python's bonding equivalent is about how tightly one piece of code depends on another's internal state.</p>
+
+<div class="eq">Pure Function (uses only its own parameters)         ~ Non-polar Covalent
+Coupled Function (reads an outside variable)          ~ Polar Covalent
+Side-Effect Function (modifies an outside variable)   ~ heading toward Ionic
+Global mutable state, touched from many places        ~ Ionic Lattice</div>
+
+<div class="note">Not three separate boxes — one sliding scale of how much touching this code risks disturbing something far away from it. A pure function is safe to move or delete in isolation, like a discrete molecule. Global state means touching one line can silently break code nowhere near it, like disturbing one layer of a lattice.</div>
+
+<div class="state">A Coupled or Side-Effect function's behavior CAN change depending on what ran before it. A Pure Function's behavior CANNOT, ever, regardless of what ran before it — the real, checkable test for how coupled a function is.</div>
+</section>
+
+<!-- ============ SECTION 6 ============ -->
+<section class="chapter">
+<div class="eyebrow">Section 6</div>
+<h2><span class="secnum">6</span>Acid / Base / Salt — Deployment Role, Fully Populated</h2>
+
+<p>Where HTML had one permanent answer (always Base, never Acid), Python is where this axis does its full job — because Python is where real acids exist.</p>
+
+<div class="eq">Script that runs, acts on other files/systems, exits   = Acid
+File/object that holds data, waits to be acted on      = Base
+Acid + Base = Salt + Water
+CSV + template (+ generator script) = rendered page (Salt) + logs (Water)</div>
+
+<div class="note">Close to a literal description of a real CSV → HTML report pipeline: the CSV and the template are both inert Bases; the generator script is the Acid driving the reaction; the individual rendered pages are the Salt — stable, done, no longer needing the script that made them.</div>
+
+<div class="eq">Strong Acid = runs deterministically to full completion
+Weak Acid   = partial — branches, early returns, conditions where it doesn't fully "ionize"</div>
+
+<div class="state">Whether a script is Strong or Weak on this axis can only be known by tracing its actual execution path for given input — the same code can run Strong for one input and Weak for another, depending on the data, not the source alone.</div>
+
+<h3>Vertical axis — does the output stay dissolved, or separate out?</h3>
+<div class="eq">In-memory variable, gone at process end        = Salt, fully dissolved
+Cache / session state, held while maintained    = Emulsion
+Written file, persists after the process ends   = Precipitate
+Portable/exported artifact (package, image)     = Ester, fully separated</div>
+
+<div class="state">WHEN you check "where is this output right now" changes the answer. A dict built mid-function is Salt while running, and ceases to exist the instant its enclosing function returns. This is called <strong>scope</strong>, and it has no equivalent honesty-requirement in either prior book.</div>
+</section>
+
+<!-- ============ SECTION 7 ============ -->
+<section class="chapter">
+<div class="eyebrow">Section 7</div>
+<h2><span class="secnum">7</span>Redox Equivalent — Left Blank in HTML, Fully Populated Here</h2>
+
+<div class="eq">Function that CAUSES another variable to change, while itself changing in the act = Reducing Agent
+The variable acted upon = the "oxidized" party</div>
+
+<div class="note">Same backwards-naming trap chemistry flagged: an agent is named for what it does to the OTHER thing, not for its own visible behavior. <span class="tag">apply_discount(cart)</span> is the reducing agent; <span class="tag">cart</span> is the oxidized party — the thing that changed. It's tempting to think the function is "the one that changed"; it's the cart.</div>
+
+<div class="state">mutating_function(shared_list)   THEN   read shared_list  ⇒ sees the mutation
+read shared_list                 THEN   mutating_function(shared_list)  ⇒ doesn't
+Whether a piece of state has "already been reduced" depends entirely on where you're standing in the execution order — not on anything readable from the variable's definition alone.</div>
+
+<div class="eq">Dependency chain / call order = the direction data actually flows
+A calls B calls C = effects flow A → B → C, NOT C → B → A</div>
+
+<div class="note">Trace the chain in the wrong direction and the whole "who reduced whom" story falls apart — same as misreading which electrode is the anode in a galvanic vs. electrolytic cell.</div>
+</section>
+
+<!-- ============ SECTION 8 ============ -->
+<section class="chapter">
+<div class="eyebrow">Section 8</div>
+<h2><span class="secnum">8</span>Thermodynamics — Execution Economics, Fully Populated</h2>
+
+<div class="eq">Spontaneous     ~ a pure computation / one-shot script, runs once given permission, no ongoing cost
+Combustion      ~ a running server / event loop — fed continuously, but self-sustaining momentum once started
+Electrolysis    ~ a timer/cron callback — zero self-sufficiency, stops dead the instant the external force withdraws</div>
+
+<div class="note">The three-way economic split (spontaneous / self-sustaining / forced) is a real structural analogy. The <em>specific</em> code pattern picked for each rung is a judgment call, not settled fact the way the chemistry underneath it is — worth pressure-testing the same way every section here has been.</div>
+
+<div class="state">Which economic category a piece of code falls into can change based on where it's called from — a "spontaneous" function called once in a script becomes part of a "combustion" system the moment it's wrapped inside a running server's request handler.</div>
+
+<h3>Kinetics — kept deliberately separate, a different question</h3>
+<div class="eq">Big-O = HOW FAST, not who's paying or how long it runs
+O(1), O(log n), O(n), O(n log n), O(n²)... orthogonal to Section 8's economics</div>
+
+<div class="note">A script can be Spontaneous (free, runs once) AND still be O(n²) (slow) — "free to trigger" and "fast once triggered" are different questions, the same way ΔG, K, and rate are related but genuinely separate in chemistry.</div>
+
+<div class="eq">Catalyst-equivalent ~ caching / memoization: faster, does NOT change WHAT the answer is</div>
+</section>
+
+<!-- ============ SECTION 9 ============ -->
+<section class="chapter">
+<div class="eyebrow">Section 9</div>
+<h2><span class="secnum">9</span>Where Python Crosses the Line HTML Couldn't</h2>
+
+<p>HTML's form section gestured at acting but never crossed into it — the browser did the real work, externally. Python does not have that shield.</p>
+
+<div class="eq">input() = Python actually receiving live input DURING execution
+name = input("What's your name? ")   ← execution PAUSES here until a human responds</div>
+
+<div class="note">HTML's <span class="tag">&lt;form&gt;</span> declared an intention; the browser (external) carried it out. <span class="tag">input()</span> doesn't declare anything — it is the act itself, and it halts the program mid-execution, waiting. A parsed HTML document has no concept of paused-and-waiting at all.</div>
+
+<div class="eq">open("file.txt", "w") = Python actually writing to disk, right now, as this line executes</div>
+
+<div class="note">Compare to HTML's <span class="tag">&lt;form action="..."&gt;</span> — HTML only ever declared where data <em>should</em> go, never sent it. This is Python holding the acid HTML could only gesture at pouring.</div>
+</section>
+
+<!-- ============ SECTION 10 ============ -->
+<section class="chapter">
+<div class="eyebrow">Section 10</div>
+<h2><span class="secnum">10</span>Distinguishing Pairs</h2>
+
+<div class="eq">=  vs  == = assignment (store a value) vs comparison (are these equal?)</div>
+<div class="cognate">The single most common real bug this causes: <span class="tag">if x = 5:</span> is not "checking if x is 5" — Python actually forbids this exact mistake with a syntax error. <em>(HTML §11)</em></div>
+
+<div class="eq">list vs tuple = mutable, changeable after creation, vs immutable, fixed forever
+is vs ==      = SAME OBJECT in memory, vs SAME VALUE</div>
+<div class="note">Two different lists holding identical numbers are <span class="tag">==</span> True but <span class="tag">is</span> False — same value, different object. No HTML pair works this way.</div>
+
+<div class="eq">return vs print = hands a value back to the caller (nothing visible on screen), vs displays text, gives nothing back</div>
+<div class="note">A function that prints its answer but doesn't return it looks like it "worked" — but any code trying to use the result gets <span class="tag">None</span>. The value was shown, never handed back.</div>
+
+<div class="eq">Argument vs Parameter = the actual value passed at call time, vs the name in the def</div>
+</section>
+
+<!-- ============ SECTION 11 ============ -->
+<section class="chapter">
+<div class="eyebrow">Section 11</div>
+<h2><span class="secnum">11</span>Variables &amp; Scope — the Mole Equivalent</h2>
+
+<p>HTML's bridge currency was the attribute=value pair. Python's bridge currency is <strong>scope</strong>: the rule governing which name refers to which value, at which point in execution — the concept every section above has quietly leaned on.</p>
+
+<div class="eq">Variable inside a function  = Local Scope (exists only during that call)
+Variable outside any function = Global Scope (exists for the module's life)</div>
+
+<div class="state">x = 5                                  # global
+def f(): x = 10; return x              # this x is a DIFFERENT x, local
+f()      ⇒ returns 10
+print(x) ⇒ still prints 5
+The same name, x, refers to two completely different values depending purely on WHERE in the file's structure a line sits.</div>
+
+<div class="note">Arguably the single most disorienting fact for someone arriving from HTML: an <span class="tag">id</span> either exists on the page or doesn't — it doesn't quietly mean something different depending which <span class="tag">&lt;div&gt;</span> you're standing inside. Scope has no HTML analogue at all.</div>
+
+<div class="eq">Function Signature = the "mole ratio" of what goes in to what comes out
+def convert(celsius): return celsius * 9/5 + 32
+1 argument in → 1 value out, exactly, every call, same ratio</div>
+
+<div class="cognate">A function call, <span class="tag">describe("Amara", 20)</span>, LOOKS like it's just "filling in slots" the way attributes filled in a tag. But each call is a fresh, order-dependent event — a new local scope created, used, destroyed, every single time it runs. An HTML tag's attributes don't get "recreated" on repeated firing; they just sit, once, forever. <em>(HTML §11, cashed in a second time)</em></div>
+</section>
+
+<!-- ============ SECTION 12 — CLAUDE'S WORKFLOW ============ -->
+<section class="chapter">
+<div class="eyebrow">Section 12 · Closing Analysis</div>
+<h2><span class="secnum">12</span>Where Claude's Python Work Actually Sits</h2>
+
+<p class="intro-block">Applying this book's own machinery to a live case: what scale does most of the Python work Claude does, inside a single context window, actually fall under? Plotted honestly, not flatteringly.</p>
+
+<div class="axis-block">
+  <div class="axis-label">ACID ←→ BASE &nbsp; (deployment role)</div>
+  <div class="axis-track"><div class="axis-marker" style="left: 22%;"></div></div>
+  <div class="axis-caption"><span>ACID — pure actor</span><span>BASE — pure receiver</span></div>
+  <div class="axis-note">Mostly <strong>Weak Acid</strong>, deliberately. Claude is the actor, driving a reaction against Bases handed over (an uploaded CSV, an existing repo) or created fresh — but rarely runs to full, unconditional completion. It checks, branches, asks a clarifying question mid-reaction. Most single-turn output is a partial ionization, not a complete one, because the request is usually underspecified until talked through.</div>
+</div>
+
+<div class="axis-block">
+  <div class="axis-label">DISSOLVED ←→ SEPARATED &nbsp; (vertical / persistence axis)</div>
+  <div class="axis-track"><div class="axis-marker" style="left: 62%;"></div></div>
+  <div class="axis-caption"><span>SALT — dissolved, ephemeral</span><span>ESTER — fully portable</span></div>
+  <div class="axis-note">Code used only inside reasoning, then discarded, is pure <strong>Salt</strong> — gone the instant the turn ends. Code handed over via a file write is deliberate <strong>Precipitate</strong> — it separates out of Claude's process entirely and becomes the user's, sitting on disk, independent. True <strong>Ester</strong> (a sealed, portable, run-elsewhere artifact) is rare unless explicitly requested. Most work lands at the file level, not the shipped-artifact level.</div>
+</div>
+
+<div class="axis-block">
+  <div class="axis-label">SPONTANEOUS ←→ FORCED &nbsp; (execution economics)</div>
+  <div class="axis-track"><div class="axis-marker" style="left: 8%;"></div></div>
+  <div class="axis-caption"><span>SPONTANEOUS — free, one-shot</span><span>ELECTROLYSIS — forced, no momentum</span></div>
+  <div class="axis-note">The most honest, least flattering placement: a single response is closest to <strong>Spontaneous</strong> — triggered, runs once to a stopping point, no self-sustaining momentum. Not the Combustion-equivalent (a server with its own running cycle), and certainly not Electrolysis (a forced timer-tick with zero self-sufficiency). Each turn is a fresh spontaneous event, paid for once, with no carryover between turns except what's written down externally — which is itself just more inert Base, waiting for the next Acid-turn to read it.</div>
+</div>
+
+<div class="axis-block">
+  <div class="axis-label">KINETICS — held separate, on purpose</div>
+  <div class="axis-track"><div class="axis-marker" style="left: 50%;"></div></div>
+  <div class="axis-caption"><span>slow / O(n²)</span><span>fast / O(1)</span></div>
+  <div class="axis-note">Rate is orthogonal to all three axes above, and honestly the least interesting one here — most code written in a session is small enough that Big-O rarely the real constraint. The bottleneck that actually matters is Section 5's coupling axis: whether output stays a clean, low-coupling Pure-Function equivalent, or drifts toward Ionic-Lattice-style entanglement with the rest of a repo. That is a design-quality question, not a speed question.</div>
+</div>
+
+<div class="closing">
+Compressed to one line: mostly Weak Acid, mostly precipitating into files, mostly Spontaneous rather than self-sustaining — and the axis that actually matters most for judging the output isn't speed at all, it's coupling.
+</div>
+</section>
+
+</body>
+</html>
